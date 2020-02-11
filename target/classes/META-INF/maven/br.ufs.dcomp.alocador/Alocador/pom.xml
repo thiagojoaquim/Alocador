@@ -33,6 +33,8 @@
             <groupId>com.googlecode.aima-java</groupId>
             <artifactId>aima-core</artifactId>
             <version>3.0.0</version>
+			<scope> system</scope>
+			<systemPath>${project.basedir}/lib/aima-core.jar</systemPath>
         </dependency>
     </dependencies>
     <packaging>jar</packaging>
