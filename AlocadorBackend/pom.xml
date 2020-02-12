@@ -4,31 +4,23 @@
     <groupId>br.ufs.dcomp.alocador</groupId>
     <artifactId>Alocador</artifactId>
     <version>Alocador</version>
-    <build>
+     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>
-                                br.ufs.dcomp.ChatRabbitMQ.ChatApp
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArguments>
+                        <endorseddirs>${endorsed.dir}</endorseddirs>
+                    </compilerArguments>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <dependencies>
+     <dependencies>
         <dependency>
             <groupId>com.googlecode.aima-java</groupId>
             <artifactId>aima-core</artifactId>
