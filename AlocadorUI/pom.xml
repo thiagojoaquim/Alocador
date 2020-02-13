@@ -7,7 +7,9 @@
     <packaging>war</packaging>
     <name>AlocadorUI</name>
     
+    
     <properties>
+           
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -38,9 +40,16 @@
         </dependency>
 
     </dependencies>
+    <pluginRepositories> 
+        <pluginRepository>
+            <id>Codehaus repository</id>
+            <url>http://insecure.repo1.maven.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
     
     <build>
         <plugins>
+           
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
