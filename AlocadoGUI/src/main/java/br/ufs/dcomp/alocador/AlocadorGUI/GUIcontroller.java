@@ -1,5 +1,8 @@
 package br.ufs.dcomp.alocador.AlocadorGUI;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -14,10 +17,27 @@ public class GUIcontroller
 	private boolean renderedP1,renderedP2,renderedP3;
 	
 	private boolean isDiscHorFixo;
+	
+	private List<String> diasSemana = new ArrayList<>();
 	{
 		renderedP1 = true;
+		diasSemana.add("SEGUNDA");
+		diasSemana.add("TERÇA");
+		diasSemana.add("QUARTA");
+		diasSemana.add("QUINTA");
+		diasSemana.add("SEXTA");
 	}
 	
+	
+	
+	public List<String> getDiasSemana() {
+		return diasSemana;
+	}
+
+	public void setDiasSemana(List<String> diasSemana) {
+		this.diasSemana = diasSemana;
+	}
+
 	public boolean isDiscHorFixo() {
 		return isDiscHorFixo;
 	}

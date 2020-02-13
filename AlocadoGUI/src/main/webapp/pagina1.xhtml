@@ -16,20 +16,15 @@
                                  p-col-12 p-md-9 p-xl-4">
 					<h:outputText value="Nome da Disciplina" />
 					<p:inputText id="nomeDisc" required="true"
-						requiredMessage="É necessário informar o nome da disciplina"
-						>
+						requiredMessage="É necessário informar o nome da disciplina">
 					</p:inputText>
 					<h:outputText value="Carga Horária da Disciplina" />
 
-					<p:spinner id="spiner" 
-					min="2"
-					required="true"
-					requiredMessage="É necessário informar a carga horária."
-					maxlength="12"
-					readonlyInput="true"				
-					max="12"
-					 />
-					
+					<p:spinner id="spiner" min="2" required="true"
+						requiredMessage="É necessário informar a carga horária."
+						maxlength="6" stepFactor="2" readonlyInput="true"
+						onkeypress="return false" max="6" />
+
 
 					<p:selectBooleanCheckbox itemLabel="Horário fixo"
 						value="#{GUIcontroller.discHorFixo}">
@@ -43,10 +38,14 @@
 					<h:outputText value="Dias da semana"
 						rendered="#{GUIcontroller.discHorFixo}" />
 
+					<p:selectCheckboxMenu id="menu"
+						value="#{GUIController.diasSemana}" label="Cities"
+						filter="true" filterMatchMode="startsWith"
+						panelStyle="width:250px">
+						<f:selectItems value="#{GUIController.diasSemana}" />
+					</p:selectCheckboxMenu>
+
 					<h:outputText value="Turno" rendered="#{GUIcontroller.discHorFixo}" />
-
-
-
 
 					<h:outputText value="Horario"
 						rendered="#{GUIcontroller.discHorFixo}" />
@@ -55,8 +54,7 @@
 			</h:form>
 		</h:panelGrid>
 		<p:tooltip
-			value="Informar carga horária maior que dois créditos e menor que doze"
-			 />
+			value="Informar carga horária maior que dois créditos e menor que doze" />
 	</p:panel>
 	<script>
 
