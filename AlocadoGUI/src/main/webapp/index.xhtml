@@ -1,0 +1,54 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+	<title>Alocador</title>
+	<link rel="icon" type="image/png" href="resources/img/pp.png" />
+	<h:outputStylesheet name="css/primeflex.css" />
+	<style type="text/css">
+body {
+	margin: 0
+}
+
+.estilo {
+	margin: 5px 5px 5px 5px !important;
+}
+
+#header {
+	height: 70px;
+	background-color: #30383c;
+	-webkit-box-shadow: 0px 10px 5px -8px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: 0px 10px 5px -8px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 10px 5px -8px rgba(0, 0, 0, 0.75);
+}
+
+ui-dialog-content ui-widget-content {
+	display: none;
+}
+</style>
+</h:head>
+<h:body>
+	<div class="p-grid" id="header"
+		style="margin-bottom: 10px; margin-right: 0; background-color: navy">
+		<div class="p-col">
+			<div style="height: 100%; display: flex; align-items: center">
+				<p:graphicImage height="50px" width="50px" name="img/pp.png"
+					style="margin: 5px"></p:graphicImage>
+				<p:spacer width="1" height="22"
+					style="position: relative; bottom: 0px;background-color: #A8A8A8; margin-left: 10px;margin-right: 8px" />
+				<h:outputLabel value="Alocador Inteligente de Professores"
+					style="color: white; font-size: 1.50em; font-weight: bold; font-family: sans-serif" />
+			</div>
+		</div>
+	</div>
+	<h:panelGroup id ="DinamycPanel" style="width: 80%;" layout="block" class="p-col-8" >
+	<p:growl id="messages" showDetail="true" />
+                <h:panelGroup rendered="#{GUIcontroller.renderedP1}">
+                    <ui:include src="pagina1.xhtml" />
+                </h:panelGroup>
+	</h:panelGroup>
+</h:body>
+</html>
