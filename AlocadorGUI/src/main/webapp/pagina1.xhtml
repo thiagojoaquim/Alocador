@@ -3,17 +3,16 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-
+	<style type="text/css">
+	.ui-selectcheckboxmenu-header { display: none; }
+	</style>
 	<p:panel id="basic" header="Informar Disciplinas"
 		footer="Observação: Para disciplinas fixas os horários deverão ser previamente informados"
 		style="margin-bottom:20px">
 		<h:panelGrid columns="2" cellpadding="10" id="pGridpai">
 			<h:form id="form">
-				<p:panelGrid columns="6" id="pGrid" class="ui-noborder"
-					columnClasses="p-col-12 p-md-3 p-xl-2,
-                                 p-col-12 p-md-9 p-xl-4,
-                                 p-col-12 p-md-3 p-xl-2,
-                                 p-col-12 p-md-9 p-xl-4">
+				<p:panelGrid columns="8" id="pGrid" class="ui-noborder"
+					style="width:100%">
 					<h:outputText value="Nome da Disciplina" />
 					<p:inputText id="nomeDisc" required="true"
 						requiredMessage="É necessário informar o nome da disciplina">
@@ -22,33 +21,36 @@
 
 					<p:spinner id="spiner" min="2" required="true"
 						requiredMessage="É necessário informar a carga horária."
-						maxlength="6" stepFactor="2" readonlyInput="true"
-						onkeypress="return false" max="6" />
+						maxlength="6" stepFactor="2" onkeypress="return false" max="6"
+						widgetVar="spinCarga" />
+					<h:outputText value="Cód. da Disciplina" />
+					<p:inputText required="true"
+						requiredMessage="É necessário informar o código da disciplina">
+					</p:inputText>
 
 
 					<p:selectBooleanCheckbox itemLabel="Horário fixo"
 						value="#{guiController.discHorFixo}">
-
 						<p:ajax update="pGridpai" />
 					</p:selectBooleanCheckbox>
 
 					<p:commandButton value="Inserir Disciplinas" id="btnInserir"
 						icon="pi pi-sign-in" widgetVar="btnVar" update="messages,pGridpai" />
 
-					<h:outputText value="Dias da semana"
+					<h:outputText value="Dias da semana" id="dSem"
 						rendered="#{guiController.discHorFixo}" />
 
-					<p:selectCheckboxMenu id="menu"
-						 label="SELECIONAR"
-						
-						filter="true" filterMatchMode="startsWith"
-						rendered="#{guiController.discHorFixo}"
-						onchange="print()"
-						panelStyle="width:250px">
-						<f:selectItems value="#{guiController.diasSemana}"
-						 noSelectionValue="true"  />
+					<p:selectCheckboxMenu id="menu" label="SELECIONAR" filter="true"
+					 	panelStyleClass="withou-selectall"
+						filterMatchMode="startsWith" required="true"
+						value="#{guiController.diasSelecionados}"
+						widgetVar="selectDias" rendered="#{guiController.discHorFixo}"
+						 panelStyle="width:250px"
+						 multiple="false"
+						 validator="validador"				 						 
+						>
+						<f:selectItems value="#{guiController.diasSemana}" /> 
 					</p:selectCheckboxMenu>
-
 					<h:outputText value="Turno" rendered="#{guiController.discHorFixo}" />
 
 					<h:outputText value="Horario"
@@ -56,12 +58,11 @@
 				</p:panelGrid>
 
 			</h:form>
+			<p:remoteCommand name="validateFiles" actionListener="#{guiController.Printar()}"   immediate="true"
+                                                  ignoreAutoUpdate="true" />
 		</h:panelGrid>
 		<p:tooltip
 			value="Informar carga horária maior que dois créditos e menor que doze" />
 	</p:panel>
-	<script>
-
-	</script>
 
 </ui:composition>
