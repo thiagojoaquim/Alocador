@@ -27,7 +27,7 @@
 
 
 					<p:selectBooleanCheckbox itemLabel="Horário fixo"
-						value="#{GUIcontroller.discHorFixo}">
+						value="#{guiController.discHorFixo}">
 
 						<p:ajax update="pGridpai" />
 					</p:selectBooleanCheckbox>
@@ -36,19 +36,23 @@
 						icon="pi pi-sign-in" widgetVar="btnVar" update="messages,pGridpai" />
 
 					<h:outputText value="Dias da semana"
-						rendered="#{GUIcontroller.discHorFixo}" />
+						rendered="#{guiController.discHorFixo}" />
 
 					<p:selectCheckboxMenu id="menu"
-						value="#{GUIController.diasSemana}" label="Cities"
+						 label="SELECIONAR"
+						
 						filter="true" filterMatchMode="startsWith"
+						rendered="#{guiController.discHorFixo}"
+						onchange="print()"
 						panelStyle="width:250px">
-						<f:selectItems value="#{GUIController.diasSemana}" />
+						<f:selectItems value="#{guiController.diasSemana}"
+						 noSelectionValue="true"  />
 					</p:selectCheckboxMenu>
 
-					<h:outputText value="Turno" rendered="#{GUIcontroller.discHorFixo}" />
+					<h:outputText value="Turno" rendered="#{guiController.discHorFixo}" />
 
 					<h:outputText value="Horario"
-						rendered="#{GUIcontroller.discHorFixo}" />
+						rendered="#{guiController.discHorFixo}" />
 				</p:panelGrid>
 
 			</h:form>

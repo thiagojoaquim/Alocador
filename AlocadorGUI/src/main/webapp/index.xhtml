@@ -34,7 +34,7 @@ ui-dialog-content ui-widget-content {
 	<div class="p-grid" id="header"
 		style="margin-bottom: 10px; margin-right: 0; background-color: navy">
 		<div class="p-col">
-			<div style="height: 100%; display: flex; align-items: center">
+			<div style="height: 100%; display: flex; align-items: center ">
 				<p:graphicImage height="50px" width="50px" name="img/pp.png"
 					style="margin: 5px"></p:graphicImage>
 				<p:spacer width="1" height="22"
@@ -46,8 +46,8 @@ ui-dialog-content ui-widget-content {
 	</div>
 	<h:panelGroup id ="DinamycPanel" style="width: 80%;" layout="block" class="p-col-8" >
 	<p:growl id="messages" showDetail="true" />
-                <h:panelGroup rendered="#{GUIcontroller.renderedP1}">
-                    <ui:include src="pagina1.xhtml" />
+                <h:panelGroup rendered="#{guiController.renderedP1}">
+                    <ui:include src="pagina1.xhtml"  />
                 </h:panelGroup>
 	</h:panelGroup>
 </h:body>

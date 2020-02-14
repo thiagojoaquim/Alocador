@@ -1,16 +1,19 @@
 package br.ufs.dcomp.alocador.AlocadorGUI;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
+import java.util.ArrayList;
+
+
 
 /**
  * Hello world!
  *
  */
-@ManagedBean(name = "GUIcontroller")
+@ManagedBean(name = "guiController")
 @SessionScoped
 public class GUIcontroller 
 {
