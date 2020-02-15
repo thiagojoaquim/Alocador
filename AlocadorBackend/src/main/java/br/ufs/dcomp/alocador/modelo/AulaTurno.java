@@ -1,17 +1,20 @@
 package br.ufs.dcomp.alocador.modelo;
 
-public enum Horario {
+import java.util.ArrayList;
+import java.util.List;
+
+public enum AulaTurno {
 	
 	PRIMEIRO(1),
 	SEGUNDO(2),
 	TERCEIRO(3),
 	QUARTO(4),
-	QUNTO(5),
+	QUINTO(5),
 	SEXTO(6);
 	
 	private int horario;
 	
-	private Horario(int horario) {
+	private AulaTurno(int horario) {
 		this.horario = horario;
 	}
 	
@@ -23,4 +26,6 @@ public enum Horario {
 	public String toString() {
 		return String.valueOf(horario);
 	}
+	
+	
 }
