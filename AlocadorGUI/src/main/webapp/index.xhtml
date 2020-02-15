@@ -47,7 +47,7 @@ ui-dialog-content ui-widget-content {
 		</div>
 	</div>
 	<h:panelGroup id ="DinamycPanel" style="width: 80%;" layout="block" class="p-col-8" >
-	<p:growl id="messages" showDetail="true" />
+	<p:growl id="messages" escape="false" showDetail="true" />
                 <h:panelGroup rendered="#{guiController.renderedP1}">
                     <ui:include src="pagina1.xhtml"  />
                 </h:panelGroup>

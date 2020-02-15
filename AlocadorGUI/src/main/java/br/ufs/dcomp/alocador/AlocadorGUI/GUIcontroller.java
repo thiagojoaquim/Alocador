@@ -1,39 +1,45 @@
 package br.ufs.dcomp.alocador.AlocadorGUI;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.FacesValidator;
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
-import org.primefaces.component.spinner.Spinner;
-
-import java.util.ArrayList;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 
 /**
  * Hello world!
  *
  */
-@FacesValidator("validador")
+
 @ManagedBean(name = "guiController")
 @SessionScoped
-public class GUIcontroller implements Validator {
+public class GUIcontroller {
 	private boolean renderedP1, renderedP2, renderedP3;
 
 	private boolean isDiscHorFixo;
 
 	private List<String> diasSemana = new ArrayList<>();
 
-	private String[] diasSelecionados;
+	private List<String> turnos = new ArrayList<String>();
 
-	private int maxSelects;
+	private List<String> horarios = new ArrayList<String>();
+
+	private String[] horarioSelecionados;
+	
+	private int tempCreditos;
+	
+	private List<Object> discInseridas = new ArrayList();
+
+	
+	private String tempCodDisc,nomeDisc;
+	
+	private Validar validador;
+
 	{
 		renderedP1 = true;
 		diasSemana.add("SEGUNDA");
@@ -41,6 +47,63 @@ public class GUIcontroller implements Validator {
 		diasSemana.add("QUARTA");
 		diasSemana.add("QUINTA");
 		diasSemana.add("SEXTA");
+		turnos.add("MANHÃ");
+		turnos.add("TARDE");
+		turnos.add("NOITE");
+		validador = validador.getValidador();
+	}
+	public boolean isTurmaInserida() {
+		return ! discInseridas.isEmpty();
+	}
+	public List<Object> getDiscInseridas() {
+		return discInseridas;
+	}
+
+
+	public void setDiscInseridas(List<Object> discInseridas) {
+		this.discInseridas = discInseridas;
+	}
+
+
+	public int getTempCreditos() {
+		return tempCreditos;
+	}
+
+
+	public void setTempCreditos(int tempCreditos) {
+		this.tempCreditos = tempCreditos;
+	}
+
+
+	public List<String> getHorarios() {
+		return horarios;
+	}
+	
+
+	public String getTempCodDisc() {
+		return tempCodDisc;
+	}
+
+
+	public void setTempCodDisc(String tempCodDisc) {
+		this.tempCodDisc = tempCodDisc;
+	}
+	
+
+	public String getNomeDisc() {
+		return nomeDisc;
+	}
+
+
+	public void setNomeDisc(String nomeDisc) {
+		this.nomeDisc = nomeDisc;
+	}
+
+
+
+
+	public List<String> getTurnos() {
+		return turnos;
 	}
 
 	public List<String> getDiasSemana() {
@@ -83,42 +146,45 @@ public class GUIcontroller implements Validator {
 		this.renderedP3 = renderedP3;
 	}
 
-	public String[] getDiasSelecionados() {
-		return diasSelecionados;
-	}
-
-	public void setDiasSelecionados(String[] diasSelecionados) {
-		this.diasSelecionados = diasSelecionados;
-	}
-
-	public void Printar() {
-		System.out.println(diasSelecionados);
-		System.out.println(diasSemana);
-	}
-	public UIComponent getAtributo(String atributo) {
-		return FacesContext.getCurrentInstance().getViewRoot().findComponent(atributo);		
-	}
-
-	@Override
-	   public void validate(FacesContext context, UIComponent component,
-	           Object value) throws ValidatorException { 
-	       //get limit
-		   UIComponent cHorariaComp = (Spinner) getAtributo("form:spiner");
-	       SelectCheckboxMenu myComponent = (SelectCheckboxMenu)component;
-	       int cargaHoraria = Integer.parseInt(cHorariaComp.getAttributes().get("value").toString());
-	      System.out.println( cHorariaComp.getAttributes().get("value"));
-	       if (((String[])myComponent.getSubmittedValue()).length*2 > cargaHoraria  ) {
-	           FacesMessage msg
-	                   = new FacesMessage("Limite de dias excedido.",
-	                           "A quantidade de dias selecionados deve ser menor ou igual que 2 vezes a carga horaria.\n"
-	                           + "Dias selecionados " + ((String[])myComponent.getSubmittedValue()).length+""
-	                           		+ "\n Dias suportados: "+cargaHoraria/2);
-	           msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-	           throw new ValidatorException(msg);
-	       } 
-	   }
-	//2T1234
-	//3T1234
 	
+	public String[] getHorarioSelecionados() {
+		return horarioSelecionados;
+	}
+
+
+	public void setHorarioSelecionados(String[] horarioSelecionados) {
+		this.horarioSelecionados = horarioSelecionados;
+	}
+
+
+	private void preencherHorarios(String turno,String[] dias) {
+		String turnSimbol;
+		turnSimbol = turno.equals("MANHÃ")? "M" : "T";
+		if(turno.equals("NOITE"))
+			turnSimbol = "N";
+		for(String dia: dias) {
+			int control  = diasSemana.indexOf(dia)+2;
+			horarios.add(control+turnSimbol+"12");
+			horarios.add(control+turnSimbol+"34");
+			if(!turnSimbol.equals("N"))
+				horarios.add(control+turnSimbol+"56");
+		}
+		
+	}
+
+	public void validarTH() {
+		SelectOneMenu turno = (SelectOneMenu) validador.getAtributo("form:turno");
+		SelectCheckboxMenu checkDias = (SelectCheckboxMenu) validador.getAtributo("form:menu");
+		String nomeTurno = turno.getSubmittedValue().toString();
+		String[] dias = ((String[])checkDias.getSubmittedValue());
+		System.out.println(nomeTurno);
+		if(nomeTurno.isEmpty()||(dias.length == 0))
+			horarios.clear();
+		else {
+			horarios.clear();
+			preencherHorarios(nomeTurno,dias);
+		}
+
+	}
 
 }
