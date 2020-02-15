@@ -9,14 +9,13 @@ public class Turma implements Serializable {
 	 */
 	private static final long serialVersionUID = 4019872052620682398L;
 	private Disciplina disciplina;
-	private List<DiaDaSemana> diaDaSemana;
-	private List<Horario> horario;
+	private List<HorarioMateria> horario;
 	private Professor professor;
-	private Turno turno;
 	
 	public Disciplina getDisciplina() {
 		return disciplina;
 	}
+	
 	public void setDisciplina(Disciplina disciplina) {
 		this.disciplina = disciplina;
 	}
@@ -24,26 +23,17 @@ public class Turma implements Serializable {
 	public Professor getProfessor() {
 		return professor;
 	}
+	
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 	}
-	public List<DiaDaSemana> getDiaDaSemana() {
-		return diaDaSemana;
-	}
-	public void setDiaDaSemana(List<DiaDaSemana> diaDaSemana) {
-		this.diaDaSemana = diaDaSemana;
-	}
-	public List<Horario> getHorario() {
+
+	public List<HorarioMateria> getHorario() {
 		return horario;
 	}
-	public void setHorario(List<Horario> horario) {
+
+	public void setHorario(List<HorarioMateria> horario) {
 		this.horario = horario;
-	}
-	public Turno getTurno() {
-		return turno;
-	}
-	public void setTurno(Turno turno) {
-		this.turno = turno;
 	}
 	
 	
