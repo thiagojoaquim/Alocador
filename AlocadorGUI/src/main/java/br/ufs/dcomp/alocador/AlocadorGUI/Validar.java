@@ -38,13 +38,12 @@ public class Validar implements Validator {
 		
 		if(qtHorarios.length*2 != cargaHoraria ) {
 			FacesMessage msg = new FacesMessage("Quantidade de hórarios incorreta.",
-					"A disciplina só tem "+cargaHoraria+" créditos de carga horaria, "
+					"A disciplina tem "+cargaHoraria+" créditos de carga horaria, "
 							+ "você deve selecionar "+cargaHoraria/2+" horários.");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(msg);
 		}
-		
-		
+
 		
 		
 	}

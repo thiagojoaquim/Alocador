@@ -25,7 +25,6 @@
 				<configuration>
 					<archive>
 						<manifest>
-
 						</manifest>
 					</archive>
 					<descriptorRefs>

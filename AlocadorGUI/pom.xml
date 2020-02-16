@@ -67,6 +67,11 @@
 		  <version>1.0.8</version>
 		  <scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>br.ufs.dcomp.alocador</groupId>
+			<artifactId>Alocador</artifactId>
+			<version>Alocador</version>
+		</dependency>
 	</dependencies>
 	
 </project>
