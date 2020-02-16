@@ -35,7 +35,13 @@ public class Turma implements Serializable {
 	public void setHorario(List<HorarioMateria> horario) {
 		this.horario = horario;
 	}
-	
+	public String getCodigosToString() {
+		String resp= "";
+		if(horario != null)
+		for(HorarioMateria m: horario)
+			resp = m.getCodigo()+ " ";
+		return resp;
+	}
 	
 }
 
