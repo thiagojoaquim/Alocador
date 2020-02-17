@@ -18,7 +18,7 @@ public enum AulaTurno {
 		this.horario = horario;
 	}
 	
-	public int getHorario() {
+	public int value() {
 		return horario;
 	}
 	

@@ -17,7 +17,7 @@ public enum Credito {
 		this.cargaHoraria = cargaHoraria;
 	}
 
-	public int getCreditos() {
+	public int getCredito() {
 		return creditos;
 	}
 

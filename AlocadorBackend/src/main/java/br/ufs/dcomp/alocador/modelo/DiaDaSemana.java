@@ -13,7 +13,7 @@ public enum DiaDaSemana {
 		this.dia = dia;
 	}
 
-	public int getDia() {
+	public int value() {
 		return dia;
 	}	
 }
