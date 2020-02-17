@@ -9,7 +9,7 @@ public class Disciplina implements Serializable {
 	 */
 	private static final long serialVersionUID = -2120979652764778026L;
 	private String nome;
-	private int cargaHoraria;
+	private Credito credito;
 	private String codigo;
 
 	public String getNome() {
@@ -20,13 +20,7 @@ public class Disciplina implements Serializable {
 		this.nome = nome;
 	}
 
-	public int getCargaHoraria() {
-		return cargaHoraria;
-	}
-
-	public void setCargaHoraria(int cargaHoraria) {
-		this.cargaHoraria = cargaHoraria;
-	}
+	
 
 	public String getCodigo() {
 		return codigo;
@@ -40,5 +34,13 @@ public class Disciplina implements Serializable {
 		if (outraDisciplina == null)
 			return false;
 		return outraDisciplina.getCodigo().equals(this.codigo);		
+	}
+
+	public Credito getCredito() {
+		return credito;
+	}
+
+	public void setCredito(Credito credito) {
+		this.credito = credito;
 	}
 }

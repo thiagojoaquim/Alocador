@@ -12,7 +12,7 @@ public enum Turno {
 		this.turno = turno;
 	}
 	
-	public String getTurno() {
+	public String value() {
 		return this.turno;
 	}
 }
