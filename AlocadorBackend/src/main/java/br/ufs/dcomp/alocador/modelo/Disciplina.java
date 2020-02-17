@@ -43,4 +43,8 @@ public class Disciplina implements Serializable {
 	public void setCredito(Credito credito) {
 		this.credito = credito;
 	}
+	@Override
+	public String toString() {
+		return nome;
+	}
 }

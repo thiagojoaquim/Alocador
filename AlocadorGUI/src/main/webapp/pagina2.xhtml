@@ -10,25 +10,57 @@
 </style>
 	<p:panel header="Voltar">
 		<h:form id="four">
-			<p:panelGrid columns="9" id="grid2" class="ui-noborder"
+			<p:panelGrid columns="8" id="grid2" class="ui-noborder"
 				style="display:flex">
 				<h:outputText value="Nome professor" />
 				<p:inputText id="nomeProf" required="true" autoUpdate="true"
-					requiredMessage="É necessário informar o nome do professor">
+					requiredMessage="É necessário informar o nome do professor"
+					value="#{guiController.nomeProf}">
 				</p:inputText>
 				<h:outputText value="Matrícula" />
 				<p:inputText id="matricula" required="true" autoUpdate="true"
+					value="#{guiController.matricula}"
 					requiredMessage="É necessário informar a matrícula">
 				</p:inputText>
 				<h:outputText value="Preferências" />
 				<p:selectCheckboxMenu id="preferencias" label="PREFERNCIAS"
-					filter="true" requiredMessage="É necessário informar os horários."
+					filter="true" requiredMessage="É necessário informar as preferencias"
 					panelStyleClass="withou-selectall" filterMatchMode="startsWith"
-					required="true" value="#{guiController.horarioSelecionados}"
-					multiple="false" validator="validador">
+					required="true" value="#{guiController.preferencias}"
+					multiple="false">
 					<f:selectItems value="#{guiController.getDiscs()}" />
 				</p:selectCheckboxMenu>
+				<p:commandButton value="Inserir professor"
+					action="#{guiController.adicionarProf()}" icon="pi pi-sign-in"
+					update="four,messages">
+				</p:commandButton>
 			</p:panelGrid>
+			<br></br>
+			<p:dataTable id="profes"
+				rendered="#{guiController.temProf()}"
+				value="#{guiController.professores}" var="professor" scrollable="true"
+				scrollHeight="220">
+				<f:facet name="header">
+                  Professores Inseridos
+               </f:facet>
+				<p:column headerText="Nome" style="text-align:center">
+					<h:outputText value="#{professor.getNome()}"
+						escape="false" />
+				</p:column>
+				<p:column headerText="Matricula" style="text-align:center">
+					<h:outputText value="#{professor.getMatricula()}" escape="false" />
+				</p:column>
+				<p:column headerText="Disciplinas de preferência" style="text-align:center">
+					<h:outputText value="#{professor.getDisciplinasDePreferencia()}"
+						escape="false" />
+				</p:column>
+				<p:column>
+					<p:commandButton value="Exluir" process="@this"
+						action="#{guiController.removerProfessor(professor)}" icon="pi pi-times"
+						update="four">
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
 		</h:form>
 		<h:form>
 			<div align="left" draggable="false">

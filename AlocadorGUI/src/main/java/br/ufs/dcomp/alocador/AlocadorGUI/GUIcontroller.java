@@ -15,9 +15,11 @@ import org.primefaces.component.selectonemenu.SelectOneMenu;
 
 import br.ufs.dcomp.alocador.modelo.AulaSequencia;
 import br.ufs.dcomp.alocador.modelo.AulaTurno;
+import br.ufs.dcomp.alocador.modelo.Credito;
 import br.ufs.dcomp.alocador.modelo.DiaDaSemana;
 import br.ufs.dcomp.alocador.modelo.Disciplina;
 import br.ufs.dcomp.alocador.modelo.HorarioMateria;
+import br.ufs.dcomp.alocador.modelo.Professor;
 import br.ufs.dcomp.alocador.modelo.Turma;
 import br.ufs.dcomp.alocador.modelo.Turno;
 
@@ -42,6 +44,8 @@ public class GUIcontroller {
 	private String[] horarioSelecionados;
 	
 	private String[] diasSelecionados;
+	
+	private String[] preferencias;
 
 	private int tempCreditos;
 
@@ -50,8 +54,14 @@ public class GUIcontroller {
 	private Validar validador;
 	
 	private String tempTurno;
+	
+	private String nomeProf;
+	
+	private String matricula;
 
 	private List<Turma> turmas = new ArrayList<>();
+	
+	private List<Professor> professores = new ArrayList<>();
 
 	{
 		renderedP1 = true;
@@ -70,6 +80,26 @@ public class GUIcontroller {
 			turmas.remove(t);
 
 	}
+	
+	public String[] getPreferencias() {
+		return preferencias;
+	}
+
+	public void setPreferencias(String[] preferencias) {
+		this.preferencias = preferencias;
+	}
+	
+	public List<Professor> getProfessores() {
+		return professores;
+	}
+	public boolean temProf() {
+		return !professores.isEmpty();
+	}
+
+	public void setProfessores(List<Professor> professores) {
+		this.professores = professores;
+	}
+
 	public boolean isCheio() {
 		return turmas.size()>5;
 	}
@@ -80,6 +110,22 @@ public class GUIcontroller {
 
 	public void setDiasSelecionados(String[] diasSelecionados) {
 		this.diasSelecionados = diasSelecionados;
+	}
+	
+	public String getNomeProf() {
+		return nomeProf;
+	}
+
+	public void setNomeProf(String nomeProf) {
+		this.nomeProf = nomeProf;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 
 	public String getTempTurno() {
@@ -376,7 +422,10 @@ public class GUIcontroller {
 			
 		}else {
 		Disciplina aux = new Disciplina();
-		aux.setCargaHoraria(tempCreditos);
+		Credito cr = tempCreditos == 2? Credito.DOIS : Credito.QUATRO;
+		if(tempCreditos == 6)
+			cr = Credito.SEIS;
+		aux.setCredito(cr);
 		aux.setCodigo(tempCodDisc);
 		aux.setNome(nomeDisc);
 		Turma tempt = new Turma();
@@ -409,5 +458,46 @@ public class GUIcontroller {
 		for(Turma t : turmas)
 			aux.add(t.getDisciplina());
 		return aux;
+	}
+	private Disciplina procuraDisc(String nome) {
+		for(Turma t:turmas)
+			if(t.getDisciplina().getNome().equals(nome))
+				return t.getDisciplina();
+		return null;
+	}
+	private boolean existeMatriculaNome(String nome,String matricula) {
+		for(Professor p:professores) 
+			if(p.getMatricula().equals(matricula) || p.getNome().equals(nome))
+				return true;
+		return false;
+	}
+	public void adicionarProf() {
+		if(preferencias.length > 5 || preferencias.length <3) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			FacesMessage msg = new FacesMessage("O professor deve ter de 3 a 5 preferências.");
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			context.addMessage(null, msg);
+			
+		}else if(existeMatriculaNome(nomeProf,matricula)) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			FacesMessage msg = new FacesMessage("Já existe um professor cadastrado com esses dados.");
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			context.addMessage(null, msg);
+		}
+		else {
+			Professor p = new Professor();
+			p.setMatricula(matricula);
+			p.setNome(nomeProf);
+			List<Disciplina> disc = new ArrayList<>();
+			for(String n: preferencias) {
+				disc.add(procuraDisc(n));
+			}
+			p.setDisciplinasDePreferencia(disc);
+			professores.add(p);
+		}
+	}
+	
+	public void removerProfessor(Professor p) {
+		professores.remove(p);
 	}
 }

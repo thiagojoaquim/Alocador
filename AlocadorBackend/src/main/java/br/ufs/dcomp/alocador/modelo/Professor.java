@@ -42,5 +42,6 @@ public class Professor implements Serializable {
 
 	public void setTurmas(List<Turma> turmas) {
 		this.turmas = turmas;
-	}	
+	}
+
 }
