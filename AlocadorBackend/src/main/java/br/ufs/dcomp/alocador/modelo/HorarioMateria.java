@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.ListModel;
 
+import org.omg.CORBA.portable.ValueBase;
+
 public class HorarioMateria implements Serializable, Comparable {
 
 	private String codigo;
@@ -94,4 +96,20 @@ public class HorarioMateria implements Serializable, Comparable {
 
 		return 0;
 	}
+
+	public int colide(HorarioMateria horario) {
+		if (this.dia.value() != horario.getDia().value()) {
+			return 0;
+		}
+
+		for (AulaTurno aulaTurno : this.aulaTurno) {
+			boolean teste = horario.getAulaTurno().stream().anyMatch( t -> {
+				return t.value() == aulaTurno.value(); 
+				});
+			if(teste)
+				return 1;
+		}
+		return 0;
+	}
+
 }

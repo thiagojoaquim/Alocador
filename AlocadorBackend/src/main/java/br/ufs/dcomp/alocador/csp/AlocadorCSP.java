@@ -44,7 +44,6 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		this.turmasDefinidas = turmasDefinidas;
 		referencias = new HashMap<Turma, List<TurmaVariavel>>();
 	}
-
 	private static List<HorarioMateria> gerarHorarios(Turno turno) {
 		List<AulaTurno> aulasTurno = Arrays.asList(AulaTurno.values());
 		List<HorarioMateria> horarios = new ArrayList<>();
@@ -91,20 +90,7 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		return resultado;
 	}
 
-	public void gerarVariaveis() {
-		Domain<Dominio> dominio = new Domain<>(dominioProblema);
-		for (Turma turma : turmas) {
-			List<TurmaVariavel> turmasVariaveis = new ArrayList<TurmaVariavel>();
-			int qtdFor = turma.getDisciplina().getCredito().getCredito() / 2;
-			for (int i = 0; i < qtdFor; i++) {
-				TurmaVariavel turmaVariavel = new TurmaVariavel(turma, i, qtdFor);
-				turmasVariaveis.add(turmaVariavel);
-				addVariable(turmaVariavel);
-				setDomain(turmaVariavel, dominio);
-			}
-			referencias.put(turma, turmasVariaveis);
-		}
-	}
+	
 
 	public List<Turma> getTurmas() {
 		return turmas;
