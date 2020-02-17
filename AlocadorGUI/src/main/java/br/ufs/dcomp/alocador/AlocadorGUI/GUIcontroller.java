@@ -70,6 +70,9 @@ public class GUIcontroller {
 			turmas.remove(t);
 
 	}
+	public boolean isCheio() {
+		return turmas.size()>5;
+	}
 	
 	public String[] getDiasSelecionados() {
 		return diasSelecionados;
@@ -388,5 +391,23 @@ public class GUIcontroller {
 	public void mostrarUni() {
 		adicionarDisciplina();
 
+	}
+	public void limparPaginas() {
+		renderedP1 = renderedP2 = renderedP3 = false;
+	}
+	
+	public void visuP2() {
+		limparPaginas();
+		renderedP2 = true;
+	}
+	public void visuP1() {
+		limparPaginas();
+		renderedP1 = true;
+	}
+	public List<Disciplina> getDiscs(){
+		List<Disciplina> aux = new ArrayList<>();
+		for(Turma t : turmas)
+			aux.add(t.getDisciplina());
+		return aux;
 	}
 }

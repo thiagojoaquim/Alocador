@@ -3,7 +3,6 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-
 	<style type="text/css">
 .ui-selectcheckboxmenu-header {
 	display: none;
@@ -13,7 +12,7 @@
 	margin: 0 auto;
 }
 </style>
-	<p:panel id="basic" header="Informar Disciplinas"
+	<p:panel id="basic" header="Adicionar Disciplinas"
 		footer="Observação: Para disciplinas fixas os horários deverão ser previamente informados"
 		style="margin-bottom:20px">
 		<h:panelGrid columns="2" cellpadding="10" id="pGridpai"
@@ -32,9 +31,7 @@
 						maxlength="6" stepFactor="2" onkeypress="return false" max="6"
 						value="#{guiController.tempCreditos}" widgetVar="spinCarga" />
 					<h:outputText value="Turno das aulas" id="pd3" />
-
-					<p:selectOneMenu id="turno" onchange="verificarTH(turnoCmd)"
-						value="#{guiController.tempTurno}"
+					<p:selectOneMenu id="turno" value="#{guiController.tempTurno}"
 						disabled="#{guiController.isTurmaInserida()}"
 						requiredMessage="É necessário informar o turno." required="true">
 						<f:selectItem itemLabel="SEL. TURNO" itemValue=""
@@ -49,14 +46,12 @@
 						value="#{guiController.discHorFixo}">
 						<p:ajax update="pGrid2" />
 					</p:selectBooleanCheckbox>
-
 				</p:panelGrid>
 				<br></br>
 				<p:panelGrid columns="8" id="pGrid2" class="ui-noborder"
 					style="width:100% ;text-align:left">
 					<h:outputText value="Dias da semana:" id="pd1"
 						rendered="#{guiController.discHorFixo}" />
-
 					<p:selectCheckboxMenu id="menu" label="SEL. DIAS" filter="true"
 						value="#{guiController.diasSelecionados}"
 						requiredMessage="É necessário informar os dias da semana."
@@ -66,8 +61,6 @@
 						multiple="false">
 						<f:selectItems value="#{guiController.diasSemana}" />
 					</p:selectCheckboxMenu>
-
-
 					<h:outputText value="Horario" id="hrr"
 						rendered="#{guiController.discHorFixo}" />
 					<p:selectCheckboxMenu id="menuHorario" label="HORÁRIOS"
@@ -83,54 +76,41 @@
 					<p:commandButton value="Inserir Disciplinas" id="btnInserir"
 						icon="pi pi-sign-in" widgetVar="btnVar"
 						actionListener="#{guiController.mostrarUni()}"
-						update="messages,pGridpai,form,tabela" />
-
+						update="messages,pGridpai,form,tabela,basic"
+						disabled="#{guiController.isCheio()}" />
 				</div>
 				<br> </br>
 				<p:dataTable id="tabela"
 					rendered="#{guiController.isTurmaInserida()}"
 					value="#{guiController.turmas}" var="turmas" scrollable="true"
-					scrollHeight="275">
+					scrollHeight="220">
 					<f:facet name="header">
-		      			Disciplinas Inseridas
-		   			 </f:facet>
+                  Disciplinas Inseridas
+               </f:facet>
 					<p:column headerText="Nome" style="text-align:center">
-
 						<h:outputText value="#{turmas.getDisciplina().getNome()}"
 							escape="false" />
 					</p:column>
 					<p:column headerText="Horarios" style="text-align:center">
-
 						<h:outputText value="#{turmas.getCodigosToString()}"
 							escape="false" />
 					</p:column>
-
 					<p:column headerText="Carga Horaria" style="text-align:center">
-
 						<h:outputText value="#{turmas.getDisciplina().getCargaHoraria()}"
 							escape="false" />
 					</p:column>
-					<p:column headerText="Turno" style="text-align:center">
-
-						<h:outputText value="#{turmas.getHorario().get(0).getTurno()}"
-							escape="false" />
-					</p:column>
 					<p:column headerText="Código" style="text-align:center">
-
 						<h:outputText value="#{turmas.getDisciplina().getCodigo()}"
 							escape="false" />
 					</p:column>
 					<p:column style="text-align:center">
-
 						<p:commandButton value="Exluir" process="@this"
 							action="#{guiController.removerTurma(turmas)}" icon="pi pi-times"
-							update="form">
+							update="form,pGridpai,basic">
 						</p:commandButton>
-
-
 					</p:column>
 				</p:dataTable>
-
+				<br></br>
 			</h:form>
 		</h:panelGrid>
 		<p:remoteCommand name="turnoCmd"
@@ -138,6 +118,16 @@
 			update="form:menuHorario" immediate="true" />
 		<p:tooltip for="form:turno"
 			value="Todas disciplinas devem ser registradas em um mesmo turno." />
+		<p:tooltip for="form:btnInserir"
+			value="O período tem que ter seis disciplinas." />
+						<h:form id="f1">
+				<div align="right" draggable="false">
+					<p:commandButton value="Avançar" id="proxPag"
+						icon="pi pi-chevron-right" update="DinamycPanel"
+						actionListener="#{guiController.visuP2()}"
+						rendered="#{guiController.isCheio()}" />
+				</div>
+			</h:form>
 	</p:panel>
 	<script>
 		function verificarTH(remoteCommand) {
