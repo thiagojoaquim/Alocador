@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import aima.core.search.csp.CSP;
+import aima.core.search.csp.CspSolver;
 import aima.core.search.csp.Domain;
 import aima.core.search.csp.Variable;
 import br.ufs.dcomp.alocador.csp.dominio.Dominio;
@@ -29,12 +30,11 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 	private List<HorarioMateria> horarios;
 	private List<Turma> turmasDefinidas;
 	private Turno turno;
+	private CspSolver<TurmaVariavel, Dominio> solver;
 
 	
 	public AlocadorCSP(List<Turma> turmas, List<Professor> professores, List<Turma> turmasDefinidas, Turno turno) {
-
-		
-		horarios = gerarHorarios(Turno.TARDE);
+		horarios = gerarHorarios(turno);
 		this.professores = professores;
 		this.turmas = turmas;
 		this.turmasDefinidas = turmasDefinidas;
@@ -51,7 +51,6 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		}
 		addRestricao();
 	}
-
 	private static List<HorarioMateria> gerarHorarios(Turno turno) {
 		List<AulaTurno> aulasTurno = Arrays.asList(AulaTurno.values());
 		List<HorarioMateria> horarios = new ArrayList<>();
@@ -119,7 +118,7 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 							h.add(horarios.get(k));
 							creditos += horarios.get(k).getAulaSequencia().getAulaSequencia();
 							listaHorarioMateria.add(h);
-							h = new ArrayList<HorarioMateria>();
+							h = new ArrayList<>();
 							h.add(horarios.get(i));
 							h.add(horarios.get(j));
 							creditos = horarios.get(i).getAulaSequencia().getAulaSequencia();
@@ -132,8 +131,8 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		return listaHorarioMateria;
 	}
 
-	public List<Dominio> gerarDominio(List<List<HorarioMateria>> horarios, List<Professor> professores) {
-		List<Dominio> resultado = new ArrayList<Dominio>();
+	private List<Dominio> gerarDominio(List<List<HorarioMateria>> horarios, List<Professor> professores) {
+		List<Dominio> resultado = new ArrayList<>();
 		for (List<HorarioMateria> horario : horarios) {
 			for (Professor professor : professores) {
 				Dominio dominio = new Dominio();
