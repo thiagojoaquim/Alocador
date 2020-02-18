@@ -36,7 +36,13 @@ public class Turma implements Serializable {
 		this.horario = horario;
 	}
 	
-	
+	public String getCodigosToString() {
+		String resp ="";
+		if(horario != null)
+			for(HorarioMateria h: horario)
+				resp = resp+h.getCodigo();
+		return resp;
+	}
 	public int colide(Turma t) {
 		for(HorarioMateria h : t.getHorario()) {
 			for(HorarioMateria h2 : this.getHorario()) {
