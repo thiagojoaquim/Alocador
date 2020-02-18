@@ -43,5 +43,14 @@ public class Turma implements Serializable {
 		return resp;
 	}
 	
+	public int colide(Turma t) {
+		for(HorarioMateria h : t.getHorario()) {
+			for(HorarioMateria h2 : this.getHorario()) {
+				if(h.colide(h2) == 1)
+					return 1;
+			}
+		}
+		return 0;
+	}
 }
 

@@ -5,23 +5,18 @@ import br.ufs.dcomp.alocador.modelo.Professor;
 
 public class Dominio {
 
-	private HorarioMateria horario;
+	private List<HorarioMateria> horario;
 	private Professor professor;
 
 	public Dominio() {
 
 	}
 
-	public Dominio(HorarioMateria horario, Professor professor) {
-		this.horario = horario;
-		this.professor = professor;
-	}
-
-	public HorarioMateria getHorario() {
+	public List<HorarioMateria> getHorario() {
 		return horario;
 	}
 
-	public void setHorario(HorarioMateria horario) {
+	public void setHorario(List<HorarioMateria> horario) {
 		this.horario = horario;
 	}
 
@@ -32,4 +27,6 @@ public class Dominio {
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 	}
+
+	
 }
