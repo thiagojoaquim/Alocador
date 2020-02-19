@@ -5,7 +5,9 @@ import br.ufs.dcomp.alocador.modelo.Turma;
 
 public class TurmaVariavel extends Variable {
 
-	public Turma turma;
+	private Turma turma;
+	
+	
 
 	public TurmaVariavel(Turma turma) {
 		super(turma.getDisciplina().getCodigo());

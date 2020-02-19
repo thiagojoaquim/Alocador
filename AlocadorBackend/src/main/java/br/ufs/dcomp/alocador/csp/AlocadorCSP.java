@@ -30,27 +30,33 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 	private List<HorarioMateria> horarios;
 	private List<Turma> turmasDefinidas;
 	private Turno turno;
-	private CspSolver<TurmaVariavel, Dominio> solver;
 
-	
 	public AlocadorCSP(List<Turma> turmas, List<Professor> professores, List<Turma> turmasDefinidas, Turno turno) {
 		horarios = gerarHorarios(turno);
 		this.professores = professores;
 		this.turmas = turmas;
 		this.turmasDefinidas = turmasDefinidas;
+		if (turmasDefinidas != null)
+			turmas.addAll(turmasDefinidas);
 		for (Turma turma : turmas) {
 			TurmaVariavel turmaVariavel = new TurmaVariavel(turma);
 			addVariable(turmaVariavel);
 		}
 		List<TurmaVariavel> variaveis = getVariables();
 		for (TurmaVariavel variavel : variaveis) {
-			List<List<HorarioMateria>> horariosPossiveis  =
-					gerarDominioHorarios(variavel.turma.getDisciplina().getCredito(), turno);
-			Domain<Dominio>  dominio = new Domain<>(gerarDominio(horariosPossiveis, professores));
+			Domain<Dominio> dominio = null;
+			if (variavel.getTurma().getHorario() != null && (!variavel.getTurma().getHorario().isEmpty())) {
+				dominio = new Domain<>(gerarDominio(Arrays.asList(variavel.getTurma().getHorario()), professores));
+			} else {
+				List<List<HorarioMateria>> horariosPossiveis = gerarDominioHorarios(
+						variavel.getTurma().getDisciplina().getCredito(), turno);
+				dominio = new Domain<>(gerarDominio(horariosPossiveis, professores));
+			}
 			setDomain(variavel, dominio);
 		}
 		addRestricao();
 	}
+
 	private static List<HorarioMateria> gerarHorarios(Turno turno) {
 		List<AulaTurno> aulasTurno = Arrays.asList(AulaTurno.values());
 		List<HorarioMateria> horarios = new ArrayList<>();
@@ -116,7 +122,6 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 						if ((horarios.get(k).getAulaSequencia().getAulaSequencia() + creditos) <= credito
 								.getCredito()) {
 							h.add(horarios.get(k));
-							creditos += horarios.get(k).getAulaSequencia().getAulaSequencia();
 							listaHorarioMateria.add(h);
 							h = new ArrayList<>();
 							h.add(horarios.get(i));
@@ -143,14 +148,14 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		}
 		return resultado;
 	}
-	
-	private void addRestricao() {		
-		for(int i = 0; i < getVariables().size(); i++) {
-			for(int j = i + 1; j < getVariables().size(); j++) {
+
+	private void addRestricao() {
+		for (int i = 0; i < getVariables().size(); i++) {
+			for (int j = i + 1; j < getVariables().size(); j++) {
 				addConstraint(new RestricaoAulaParalela(getVariables().get(i), getVariables().get(j)));
 			}
 		}
-		for(TurmaVariavel var : getVariables()) {
+		for (TurmaVariavel var : getVariables()) {
 			addConstraint(new RestricaoPreferenciaProfessor(var));
 		}
 	}
@@ -187,9 +192,6 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		this.professores = professores;
 	}
 
-	public static void main(String[] args) {
-	}
-
 	public Turno getTurno() {
 		return turno;
 	}
@@ -197,4 +199,5 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 	public void setTurno(Turno turno) {
 		this.turno = turno;
 	}
+
 }
