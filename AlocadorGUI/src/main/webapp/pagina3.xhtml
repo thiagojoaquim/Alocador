@@ -20,10 +20,17 @@
 				</p:column>
 
 				<p:column headerText="Horário">
-					<h:outputText value="#{t.getCodigosToString()}" />
+					<h:outputText value="#{t.getHorario()}" />
 				</p:column>
 
 			</p:dataTable>
+		</h:form>
+		<h:form>
+			<div align="left" draggable="false">
+				<p:commandButton value="Voltar" id="backto2"
+					icon="pi pi-chevron-left" update="DinamycPanel"
+					actionListener="#{guiController.visuP2()}" />
+			</div>
 		</h:form>
 
 	</p:panel>

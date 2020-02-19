@@ -150,7 +150,7 @@ public class GUIcontroller {
 			sum += t.getDisciplina().getCredito().getCredito();
 		}
 
-		if((sum/2)+1 >15 || (sum/2)+2>15 || (sum/2)+3>15) {
+		if((sum/2)+1 >Tcredito || (sum/2)+2>Tcredito || (sum/2)+3>Tcredito) {
 			return true;
 		}
 		return false;
@@ -460,7 +460,7 @@ public class GUIcontroller {
 
 	public boolean existeCodigo(String cod) {
 		for (Turma t : turmas) {
-			if (t.getDisciplina().getNome().equals(cod))
+			if (t.getDisciplina().getCodigo().equals(cod))
 				return true;
 		}
 		return false;
@@ -593,9 +593,10 @@ public class GUIcontroller {
 		renderedP3 = true;
 	}
 	public void  obterResp() {
+		visuP3();
 		Alocador a = new Alocador(montarGrade());
 		resposta = a.alocar();
 		System.out.println(resposta);
-		visuP3();
+
 	}
 }
