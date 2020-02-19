@@ -68,6 +68,8 @@ public class GUIcontroller {
 	private List<Turma> turmaFixa = new ArrayList<Turma>();
 	
 	private Turno turno;
+	
+	private List<Turma> resposta = new ArrayList<Turma>();
 
 	{
 		renderedP1 = true;
@@ -96,6 +98,16 @@ public class GUIcontroller {
 
 	public void setTurmaNormal(List<Turma> turmaNormal) {
 		this.turmaNormal = turmaNormal;
+	}
+	
+	
+	public List<Turma> getResposta() {
+		return resposta;
+	}
+
+
+	public void setResposta(List<Turma> resposta) {
+		this.resposta = resposta;
 	}
 
 
@@ -576,9 +588,14 @@ public class GUIcontroller {
 		grade.setTurno(turno);
 		return grade;
 	}
+	private void visuP3() {
+		limparPaginas();
+		renderedP3 = true;
+	}
 	public void  obterResp() {
 		Alocador a = new Alocador(montarGrade());
-		List<Turma> t=  a.alocar();
-		System.out.println(t);
+		resposta = a.alocar();
+		System.out.println(resposta);
+		visuP3();
 	}
 }

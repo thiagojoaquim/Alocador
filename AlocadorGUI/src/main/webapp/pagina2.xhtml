@@ -63,11 +63,12 @@
 			</p:dataTable>
 			<br></br>
 			<div align="right" draggable="false">
-				<p:commandButton value="Obter Resposta" id="obterResp"
+				<p:commandButton value="Obter Resposta"
 					icon="pi pi-sign-in"
 					actionListener="#{guiController.obterResp()}"
 					update="messages"
-										immediate="true"
+					id="id"
+					immediate="true"
 					rendered="#{guiController.podeCalcular()}" />
 			</div>
 		</h:form>
