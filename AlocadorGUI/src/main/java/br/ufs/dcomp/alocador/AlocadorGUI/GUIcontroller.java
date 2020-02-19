@@ -6,18 +6,18 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 
+import br.ufs.dcomp.alocador.csp.Alocador;
 import br.ufs.dcomp.alocador.modelo.AulaSequencia;
 import br.ufs.dcomp.alocador.modelo.AulaTurno;
 import br.ufs.dcomp.alocador.modelo.Credito;
 import br.ufs.dcomp.alocador.modelo.DiaDaSemana;
 import br.ufs.dcomp.alocador.modelo.Disciplina;
+import br.ufs.dcomp.alocador.modelo.Grade;
 import br.ufs.dcomp.alocador.modelo.HorarioMateria;
 import br.ufs.dcomp.alocador.modelo.Professor;
 import br.ufs.dcomp.alocador.modelo.Turma;
@@ -42,9 +42,9 @@ public class GUIcontroller {
 	private List<String> horarios = new ArrayList<String>();
 
 	private String[] horarioSelecionados;
-	
+
 	private String[] diasSelecionados;
-	
+
 	private String[] preferencias;
 
 	private int tempCreditos;
@@ -52,16 +52,22 @@ public class GUIcontroller {
 	private String tempCodDisc, nomeDisc;
 
 	private Validar validador;
-	
+
 	private String tempTurno;
-	
+
 	private String nomeProf;
-	
+
 	private String matricula;
 
 	private List<Turma> turmas = new ArrayList<>();
-	
+
 	private List<Professor> professores = new ArrayList<>();
+	
+	private List<Turma> turmaNormal = new ArrayList<Turma>();
+	
+	private List<Turma> turmaFixa = new ArrayList<Turma>();
+	
+	private Turno turno;
 
 	{
 		renderedP1 = true;
@@ -75,12 +81,34 @@ public class GUIcontroller {
 		turnos.add("NOITE");
 		validador = Validar.getValidador();
 	}
+
 	public void removerTurma(Turma t) {
-		if(!turmas.isEmpty())
+		if (!turmas.isEmpty())
 			turmas.remove(t);
 
 	}
 	
+
+	public List<Turma> getTurmaNormal() {
+		return turmaNormal;
+	}
+
+
+	public void setTurmaNormal(List<Turma> turmaNormal) {
+		this.turmaNormal = turmaNormal;
+	}
+
+
+	public List<Turma> getTurmaFixa() {
+		return turmaFixa;
+	}
+
+
+	public void setTurmaFixa(List<Turma> turmaFixa) {
+		this.turmaFixa = turmaFixa;
+	}
+
+
 	public String[] getPreferencias() {
 		return preferencias;
 	}
@@ -88,10 +116,11 @@ public class GUIcontroller {
 	public void setPreferencias(String[] preferencias) {
 		this.preferencias = preferencias;
 	}
-	
+
 	public List<Professor> getProfessores() {
 		return professores;
 	}
+
 	public boolean temProf() {
 		return !professores.isEmpty();
 	}
@@ -99,11 +128,22 @@ public class GUIcontroller {
 	public void setProfessores(List<Professor> professores) {
 		this.professores = professores;
 	}
-
 	public boolean isCheio() {
-		return turmas.size()>5;
+		int sum=0;
+		int Tcredito = 15;
+		if(turno != null)
+			if(turno.equals(turno.NOITE))
+				Tcredito = 10;
+		for(Turma t: turmas) {
+			sum += t.getDisciplina().getCredito().getCredito();
+		}
+
+		if((sum/2)+1 >15 || (sum/2)+2>15 || (sum/2)+3>15) {
+			return true;
+		}
+		return false;
 	}
-	
+
 	public String[] getDiasSelecionados() {
 		return diasSelecionados;
 	}
@@ -111,7 +151,7 @@ public class GUIcontroller {
 	public void setDiasSelecionados(String[] diasSelecionados) {
 		this.diasSelecionados = diasSelecionados;
 	}
-	
+
 	public String getNomeProf() {
 		return nomeProf;
 	}
@@ -133,6 +173,10 @@ public class GUIcontroller {
 	}
 
 	public void setTempTurno(String tempTurno) {
+		turno = tempTurno.equals("MANHÃ") ? Turno.MANHA : Turno.TARDE;
+		if(tempTurno.equals("NOITE"))
+			turno = Turno.NOITE;
+		System.out.println(turno);
 		this.tempTurno = tempTurno;
 	}
 
@@ -226,7 +270,7 @@ public class GUIcontroller {
 
 	public void setHorarioSelecionados(String[] horarioSelecionados) {
 		this.horarioSelecionados = horarioSelecionados;
-		
+
 	}
 
 	private void preencherHorarios(String turno, String[] dias) {
@@ -274,10 +318,10 @@ public class GUIcontroller {
 //		return false;
 //	}
 //	
-	private boolean horarioSeguido(String h1,String h2) {
-		if(h1.equals("12") && h2.equals("34"))
+	private boolean horarioSeguido(String h1, String h2) {
+		if (h1.equals("12") && h2.equals("34"))
 			return true;
-		if(h1.equals("34") && h2.equals("56"))
+		if (h1.equals("34") && h2.equals("56"))
 			return true;
 		return false;
 	}
@@ -289,26 +333,26 @@ public class GUIcontroller {
 			listaHorarios.add(s);
 		}
 
-		for (int i = 0;i<listaHorarios.size();i++) {
+		for (int i = 0; i < listaHorarios.size(); i++) {
 			String h = listaHorarios.get(i);
 			boolean isSeguido = false;
-			for (int j =i+1 ;j<listaHorarios.size();j++) {
+			for (int j = i + 1; j < listaHorarios.size(); j++) {
 				String s = listaHorarios.get(j);
 				if (h.subSequence(0, 2).equals(s.subSequence(0, 2))) {
-					if(horarioSeguido(h.substring(2,4), s.substring(2,4))) {
-					String temp = h.substring(0, 2) + h.substring(2, 4) + s.substring(2, 4);
-					i++;
-					listaHorarioFinal.add(temp);
-					isSeguido = true;
-					break;
+					if (horarioSeguido(h.substring(2, 4), s.substring(2, 4))) {
+						String temp = h.substring(0, 2) + h.substring(2, 4) + s.substring(2, 4);
+						i++;
+						listaHorarioFinal.add(temp);
+						isSeguido = true;
+						break;
 					}
 				}
 			}
-			if(!isSeguido) {
-				if(!listaHorarioFinal.contains(h))
+			if (!isSeguido) {
+				if (!listaHorarioFinal.contains(h))
 					listaHorarioFinal.add(h);
 			}
-			if(listaHorarios.isEmpty())
+			if (listaHorarios.isEmpty())
 				break;
 		}
 		return listaHorarioFinal;
@@ -320,16 +364,16 @@ public class GUIcontroller {
 		String fim = "";
 
 		for (int i = 0; i < horarios.size(); i++) {
-			parcial = horarios.get(i).substring(0,1);
+			parcial = horarios.get(i).substring(0, 1);
 			boolean match = false;
 			for (int j = i + 1; j < horarios.size(); j++) {
-				
+
 				if (horarios.get(i).length() == horarios.get(j).length()) {
 					System.out.println(parcial);
 					if (horarios.get(i).substring(1).equals(horarios.get(j).substring(1))) {
 						parcial = parcial + horarios.get(j).substring(0, 1);
 						fim = horarios.get(i).substring(1, horarios.get(i).length());
-						i=j;
+						i = j;
 						match = true;
 					}
 				}
@@ -346,41 +390,42 @@ public class GUIcontroller {
 		return resp;
 
 	}
-	private List<HorarioMateria>  montarHorarioMateria() {
+
+	private List<HorarioMateria> montarHorarioMateria() {
 		List<String> horariosIndividuais = unificaHorario(); // HORARIOS UNIFICADOS POR SEQUENCIA
-															// EX: 2T1234
+																// EX: 2T1234
 		List<String> horariosJuntos = unificarDiasHorario(horariosIndividuais);// horarios junto ex: 246T12
-		List<HorarioMateria> resp = new ArrayList<>();		
-		for(String s: horariosIndividuais) {
+		List<HorarioMateria> resp = new ArrayList<>();
+		for (String s : horariosIndividuais) {
 			HorarioMateria aux = new HorarioMateria();
-			AulaSequencia aula = s.length() <5 ? AulaSequencia.DOIS : AulaSequencia.QUATRO;
+			AulaSequencia aula = s.length() < 5 ? AulaSequencia.DOIS : AulaSequencia.QUATRO;
 			List<AulaTurno> auxAT = new ArrayList<>();
-			if(s.contains("12")) {
+			if (s.contains("12")) {
 				auxAT.add(AulaTurno.PRIMEIRO);
 				auxAT.add(AulaTurno.SEGUNDO);
 			}
-			if(s.contains("34")) {
+			if (s.contains("34")) {
 				auxAT.add(AulaTurno.TERCEIRO);
 				auxAT.add(AulaTurno.QUARTO);
-			}			
-			if(s.contains("56")) {
+			}
+			if (s.contains("56")) {
 				auxAT.add(AulaTurno.QUINTO);
 				auxAT.add(AulaTurno.SEXTO);
 			}
-			Turno t ;
+			Turno t;
 			t = s.contains("T") ? Turno.TARDE : Turno.MANHA;
-			if(s.contains("N"))
+			if (s.contains("N"))
 				t = Turno.NOITE;
 			DiaDaSemana dia = null;
-			if(s.substring(0,1).equals("2"))
+			if (s.substring(0, 1).equals("2"))
 				dia = DiaDaSemana.SEGUNDA;
-			if(s.substring(0,1).equals("3"))
+			if (s.substring(0, 1).equals("3"))
 				dia = DiaDaSemana.TERCA;
-			if(s.substring(0,1).equals("4"))
+			if (s.substring(0, 1).equals("4"))
 				dia = DiaDaSemana.QUINTA;
-			if(s.substring(0,1).equals("5"))
+			if (s.substring(0, 1).equals("5"))
 				dia = DiaDaSemana.QUINTA;
-			if(s.substring(0,1).equals("6"))
+			if (s.substring(0, 1).equals("6"))
 				dia = DiaDaSemana.SEXTA;
 			aux.setAulaSequencia(aula);
 			aux.setAulaTurno(auxAT);
@@ -388,116 +433,152 @@ public class GUIcontroller {
 			aux.setDia(dia);
 			aux.setTurno(t);
 			resp.add(aux);
-									
+
 		}
 		return resp;
 	}
+
 	public boolean existeNome(String nome) {
-		for(Turma t: turmas) {
-			if(t.getDisciplina().getNome().equals(nome))
+		for (Turma t : turmas) {
+			if (t.getDisciplina().getNome().equals(nome))
 				return true;
 		}
 		return false;
 	}
+
 	public boolean existeCodigo(String cod) {
-		for(Turma t: turmas) {
-			if(t.getDisciplina().getNome().equals(cod))
+		for (Turma t : turmas) {
+			if (t.getDisciplina().getNome().equals(cod))
 				return true;
 		}
 		return false;
 	}
+
 	private void limparVariaveis() {
-		nomeDisc = tempCodDisc =  "";
-		tempCreditos=2;
+		nomeDisc = tempCodDisc = "";
+		tempCreditos = 2;
 		horarioSelecionados = diasSelecionados = new String[0];
 
-		
 	}
-	public void adicionarDisciplina(){
-		if(existeNome(nomeDisc) || existeCodigo(tempCodDisc)) {
+
+	public void adicionarDisciplina() {
+		if (existeNome(nomeDisc) || existeCodigo(tempCodDisc)) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			FacesMessage msg = new FacesMessage("Já existe uma disciplina com esses dados.");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			context.addMessage(null, msg);
-			
-		}else {
-		Disciplina aux = new Disciplina();
-		Credito cr = tempCreditos == 2? Credito.DOIS : Credito.QUATRO;
-		if(tempCreditos == 6)
-			cr = Credito.SEIS;
-		aux.setCredito(cr);
-		aux.setCodigo(tempCodDisc);
-		aux.setNome(nomeDisc);
-		Turma tempt = new Turma();
-		tempt.setDisciplina(aux);
-		if(isDiscHorFixo) 
-			tempt.setHorario(montarHorarioMateria());
-		turmas.add(tempt);
-		limparVariaveis();
+
+		} else {
+			Disciplina aux = new Disciplina();
+			Credito cr = tempCreditos == 2 ? Credito.DOIS : Credito.QUATRO;
+			if (tempCreditos == 6)
+				cr = Credito.SEIS;
+			aux.setCredito(cr);
+			aux.setCodigo(tempCodDisc);
+			aux.setNome(nomeDisc);
+			Turma tempt = new Turma();
+			tempt.setDisciplina(aux);
+			if (isDiscHorFixo) {
+				tempt.setHorario(montarHorarioMateria());
+				turmaFixa.add(tempt);
+				
+			}else {
+				turmaNormal.add(tempt);
+			}
+			turmas.add(tempt);
+			limparVariaveis();
 		}
-		
+
 	}
+
 	public void mostrarUni() {
 		adicionarDisciplina();
 
 	}
+
 	public void limparPaginas() {
 		renderedP1 = renderedP2 = renderedP3 = false;
 	}
-	
+
 	public void visuP2() {
 		limparPaginas();
 		renderedP2 = true;
 	}
+
 	public void visuP1() {
 		limparPaginas();
 		renderedP1 = true;
 	}
-	public List<Disciplina> getDiscs(){
+
+	public List<Disciplina> getDiscs() {
 		List<Disciplina> aux = new ArrayList<>();
-		for(Turma t : turmas)
+		for (Turma t : turmas)
 			aux.add(t.getDisciplina());
 		return aux;
 	}
+
 	private Disciplina procuraDisc(String nome) {
-		for(Turma t:turmas)
-			if(t.getDisciplina().getNome().equals(nome))
+		for (Turma t : turmas)
+			if (t.getDisciplina().getNome().equals(nome))
 				return t.getDisciplina();
 		return null;
 	}
-	private boolean existeMatriculaNome(String nome,String matricula) {
-		for(Professor p:professores) 
-			if(p.getMatricula().equals(matricula) || p.getNome().equals(nome))
+
+	private boolean existeMatriculaNome(String nome, String matricula) {
+		for (Professor p : professores)
+			if (p.getMatricula().equals(matricula) || p.getNome().equals(nome))
 				return true;
 		return false;
 	}
+
 	public void adicionarProf() {
-		if(preferencias.length > 5 || preferencias.length <3) {
+		if (preferencias.length > 5 || preferencias.length < 3) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			FacesMessage msg = new FacesMessage("O professor deve ter de 3 a 5 preferências.");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			context.addMessage(null, msg);
-			
-		}else if(existeMatriculaNome(nomeProf,matricula)) {
+
+		} else if (existeMatriculaNome(nomeProf, matricula)) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			FacesMessage msg = new FacesMessage("Já existe um professor cadastrado com esses dados.");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			context.addMessage(null, msg);
-		}
-		else {
+		} else {
 			Professor p = new Professor();
 			p.setMatricula(matricula);
 			p.setNome(nomeProf);
 			List<Disciplina> disc = new ArrayList<>();
-			for(String n: preferencias) {
+			for (String n : preferencias) {
 				disc.add(procuraDisc(n));
 			}
 			p.setDisciplinasDePreferencia(disc);
 			professores.add(p);
+			nomeProf = matricula = "";
+			preferencias = new String[0];
 		}
+
 	}
-	
+
 	public void removerProfessor(Professor p) {
 		professores.remove(p);
+	}
+	public boolean podeCalcular() {
+		return professores.size() > 4;
+	}
+	
+	public Grade montarGrade() {
+		Grade grade = new Grade();
+		grade.setProfessores(professores);
+		if(!turmaNormal.isEmpty())
+			grade.setTurmas(turmaNormal);
+		if(!turmaFixa.isEmpty())
+			grade.setTurmasDefinidas(turmaFixa);
+		grade.setTurno(turno);
+		return grade;
+	}
+	public void  obterResp() {
+		Alocador a = new Alocador(montarGrade());
+		List<Turma> t=  a.alocar();
+		System.out.println(t);
 	}
 }

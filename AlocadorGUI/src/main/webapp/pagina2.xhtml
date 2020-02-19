@@ -24,7 +24,8 @@
 				</p:inputText>
 				<h:outputText value="Preferências" />
 				<p:selectCheckboxMenu id="preferencias" label="PREFERNCIAS"
-					filter="true" requiredMessage="É necessário informar as preferencias"
+					filter="true"
+					requiredMessage="É necessário informar as preferencias"
 					panelStyleClass="withou-selectall" filterMatchMode="startsWith"
 					required="true" value="#{guiController.preferencias}"
 					multiple="false">
@@ -36,37 +37,46 @@
 				</p:commandButton>
 			</p:panelGrid>
 			<br></br>
-			<p:dataTable id="profes"
-				rendered="#{guiController.temProf()}"
-				value="#{guiController.professores}" var="professor" scrollable="true"
-				scrollHeight="220">
+			<p:dataTable id="profes" rendered="#{guiController.temProf()}"
+				value="#{guiController.professores}" var="professor"
+				scrollable="true" scrollHeight="220">
 				<f:facet name="header">
                   Professores Inseridos
                </f:facet>
 				<p:column headerText="Nome" style="text-align:center">
-					<h:outputText value="#{professor.getNome()}"
-						escape="false" />
+					<h:outputText value="#{professor.getNome()}" escape="false" />
 				</p:column>
 				<p:column headerText="Matricula" style="text-align:center">
 					<h:outputText value="#{professor.getMatricula()}" escape="false" />
 				</p:column>
-				<p:column headerText="Disciplinas de preferência" style="text-align:center">
+				<p:column headerText="Disciplinas de preferência"
+					style="text-align:center">
 					<h:outputText value="#{professor.getDisciplinasDePreferencia()}"
 						escape="false" />
 				</p:column>
 				<p:column>
 					<p:commandButton value="Exluir" process="@this"
-						action="#{guiController.removerProfessor(professor)}" icon="pi pi-times"
-						update="four">
+						action="#{guiController.removerProfessor(professor)}"
+						icon="pi pi-times" update="four">
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
+			<br></br>
+			<div align="right" draggable="false">
+				<p:commandButton value="Obter Resposta" id="obterResp"
+					icon="pi pi-sign-in"
+					actionListener="#{guiController.obterResp()}"
+					update="messages"
+										immediate="true"
+					rendered="#{guiController.podeCalcular()}" />
+			</div>
 		</h:form>
-		<h:form>
+		<h:form id="bott">
 			<div align="left" draggable="false">
 				<p:commandButton value="Voltar" id="proxPag"
 					icon="pi pi-chevron-left" update="DinamycPanel"
 					actionListener="#{guiController.visuP1()}"
+
 					rendered="#{guiController.isCheio()}" />
 			</div>
 		</h:form>
