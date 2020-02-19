@@ -2,7 +2,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>br.ufs.dcomp.alocador</groupId>
 	<artifactId>AlocadorGUI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -49,29 +48,34 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.primefaces/primefaces -->
 		<dependency>
-		    <groupId>org.primefaces</groupId>
-		    <artifactId>primefaces</artifactId>
-		    <version>7.0</version>
-		</dependency>		
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>7.0</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.primefaces.themes/all-themes -->
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.0.1</version>
-		    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		  <groupId>org.primefaces.extensions</groupId>
-		  <artifactId>all-themes</artifactId>
-		  <version>1.0.8</version>
-		  <scope>compile</scope>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.8</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.ufs.dcomp.alocador</groupId>
 			<artifactId>Alocador</artifactId>
-			<version>Alocador</version>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>aima-core</groupId>
+			<artifactId>aima-core</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 	</dependencies>
-	
+
 </project>
