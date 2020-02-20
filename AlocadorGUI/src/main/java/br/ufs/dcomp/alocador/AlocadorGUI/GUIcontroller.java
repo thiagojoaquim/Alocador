@@ -548,7 +548,7 @@ public class GUIcontroller {
 
 	public void limparPaginas() {
 		renderedP1 = renderedP2 = renderedP3=
-				 renderedCD= false;
+				 renderedCD= renderedPF = false;
 	}
 
 	public void visuP2() {
@@ -645,6 +645,7 @@ public class GUIcontroller {
 		turmas = serializador.carregarLista(nome);
 		turno = serializador.carregarTurno(nome);
 		System.out.println(turmas);
+		System.out.println(turno);
 		limparPaginas();
 		renderedPF = true;
 	}
@@ -663,7 +664,25 @@ public class GUIcontroller {
 	
 	public List<Professor> carregarProfs(){
 		professoresAUX = serializador.carregarProfessores();
-		return professores;
+		return professoresAUX;
+	}
+	public void inserirPref(Professor p) {
+		if(preferencias.length > 2 || preferencias.length <6) {
+		System.out.println(p.getDisciplinasDePreferencia());
+		List<Disciplina> temp = new ArrayList<>();
+		for(String s:preferencias)
+			temp.add(procuraDisc(s));
+		p.setDisciplinasDePreferencia(temp);
+		professores.add(p);
+		professoresAUX.remove(p);
+		System.out.println(p.getDisciplinasDePreferencia());
+		}else {
+			FacesContext context = FacesContext.getCurrentInstance();
+			FacesMessage msg = new FacesMessage("O professor deve ter de 3 a 5 preferências.");
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			context.addMessage(null, msg);
+			
+		}
 	}
 
 }

@@ -8,7 +8,7 @@
 	display: none;
 }
 </style>
-	<p:panel header="Professores S">
+	<p:panel header="Professores Selecionados">
 		<h:form id="Fora">
 			<p:dataTable value="#{guiController.carregarProfs()}" var="professor"
 				scrollable="true" scrollHeight="220">
@@ -21,8 +21,8 @@
 				<p:column headerText="Matricula" style="text-align:center">
 					<h:outputText value="#{professor.getMatricula()}" escape="false" />
 				</p:column>
-				<p:column headerText="Disciplinas de preferência">
-					<p:selectCheckboxMenu slabel="PREFERNCIAS" filter="true"
+				<p:column headerText="Disciplinas de preferência" style="text-align:center">
+					<p:selectCheckboxMenu label="Definir Preferências" filter="true"
 						requiredMessage="É necessário informar as preferencias"
 						panelStyleClass="withou-selectall" filterMatchMode="startsWith"
 						required="true" value="#{guiController.preferencias}"
@@ -33,7 +33,7 @@
 				<p:column style="text-align:center">
 					<p:commandButton value="Inserir" process="@this"
 						action="#{guiController.inserirPref(professor)}" icon="pi pi-sign-in"
-						update="fora">
+						update="fora,messages">
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>

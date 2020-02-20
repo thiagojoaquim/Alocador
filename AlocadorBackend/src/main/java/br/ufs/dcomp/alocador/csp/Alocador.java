@@ -8,7 +8,6 @@ import aima.core.search.csp.Assignment;
 import aima.core.search.csp.CspSolver;
 import aima.core.search.csp.FlexibleBacktrackingSolver;
 import br.ufs.dcomp.alocador.csp.dominio.Dominio;
-import br.ufs.dcomp.alocador.csp.listener.AlocadorListener;
 import br.ufs.dcomp.alocador.csp.variaveis.TurmaVariavel;
 import br.ufs.dcomp.alocador.modelo.Grade;
 import br.ufs.dcomp.alocador.modelo.Turma;
