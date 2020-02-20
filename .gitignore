@@ -1,6 +1,8 @@
 # Compiled class file
 *.class
-
+.classpath
+.project
+.tern-project
 # Log file
 *.log
 
