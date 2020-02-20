@@ -10,9 +10,8 @@
 </style>
 	<p:panel header="Selecionar Arquivo">
 		<h:form id="fora">
-			<p:dataTable id="arquivos" 
-				value="#{guiController.listaArquivos()}" var="arq" scrollable="true"
-				scrollHeight="220">
+			<p:dataTable id="arquivos" value="#{guiController.listaArquivos()}"
+				var="arq" scrollable="true" scrollHeight="220">
 				<f:facet name="header">
                   Professores Inseridos
                </f:facet>
@@ -22,10 +21,17 @@
 				<p:column style="text-align:center">
 					<p:commandButton value="Carregar" process="@this"
 						action="#{guiController.carregarDisciplinas(arq)}"
-						icon="pi pi-times" update="DinamycPanel">
+						icon="pi pi-sign-in" update="DinamycPanel">
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
+		</h:form>
+		<h:form >
+			<div align="left" draggable="false">
+				<p:commandButton value="Voltar" id="backpage"
+					icon="pi pi-chevron-left" update="DinamycPanel"
+					actionListener="#{guiController.visuP1()}" />
+			</div>
 		</h:form>
 	</p:panel>
 

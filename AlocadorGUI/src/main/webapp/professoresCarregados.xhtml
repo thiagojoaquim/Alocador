@@ -10,47 +10,37 @@
 </style>
 	<p:panel header="Professores Selecionados">
 		<h:form id="Fora">
-			<p:dataTable value="#{guiController.carregarProfs()}" var="professor"
-				scrollable="true" scrollHeight="220">
-				<f:facet name="header">
-                  Professores Inseridos
-               </f:facet>
-				<p:column headerText="Nome" style="text-align:center">
-					<h:outputText value="#{professor.getNome()}" escape="false" />
-				</p:column>
-				<p:column headerText="Matricula" style="text-align:center">
-					<h:outputText value="#{professor.getMatricula()}" escape="false" />
-				</p:column>
-				<p:column headerText="Disciplinas de preferência" style="text-align:center">
-					<p:selectCheckboxMenu label="Definir Preferências" filter="true"
-						requiredMessage="É necessário informar as preferencias"
-						panelStyleClass="withou-selectall" filterMatchMode="startsWith"
-						required="true" value="#{guiController.preferencias}"
-						multiple="false">
-						<f:selectItems value="#{guiController.getDiscs()}" />
-					</p:selectCheckboxMenu>
-				</p:column>
-				<p:column style="text-align:center">
-					<p:commandButton value="Inserir" process="@this"
-						action="#{guiController.inserirPref(professor)}" icon="pi pi-sign-in"
-						update="fora,messages">
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
-			<br></br>
-			<div align="right" draggable="false">
-				<p:commandButton value="Obter Resposta" icon="pi pi-sign-in"
-					actionListener="#{guiController.obterResp()}"
-					update="messages,DinamycPanel" process="@this" id="idai2"
-					immediate="true" rendered="#{guiController.podeCalcular()}" />
-			</div>
+			<p:panelGrid columns="4" id="pGrid" class="ui-noborder"
+				style="display:flex">
+				<p:selectOneMenu id="turno" 
+				value="#{guiController.nomeProf}"
+					requiredMessage="É necessário escolher o professor."
+					required="true">
+					<f:selectItem itemLabel="SEL. PROF" noSelectionOption="true" itemValue="" />
+					<f:selectItems value="#{guiController.nomesProfAUX}" />
+				</p:selectOneMenu>
+				<p:selectCheckboxMenu label="Definir Preferências" filter="true"
+					id="sell" requiredMessage="É necessário informar as preferencias"
+					panelStyleClass="withou-selectall" filterMatchMode="startsWith"
+					required="true" value="#{guiController.preferencias}"
+					multiple="false">
+					<f:selectItems value="#{guiController.getDiscs()}" />
+				</p:selectCheckboxMenu>
+				<p:commandButton value="Adicionar" icon="pi pi-sign-in"
+						actionListener="#{guiController.inserirPref()}"
+						update="messages,DinamycPanel,Fora"
+						 />
+					<p:commandButton value="Obter Resposta" icon="pi pi-sign-in"
+						actionListener="#{guiController.obterResp()}"
+						update="messages,DinamycPanel" process="@this" id="idai2"
+						immediate="true" rendered="#{guiController.podeCalcular()}" />
+			</p:panelGrid>
 		</h:form>
 		<h:form id="bott">
 			<div align="left" draggable="false">
 				<p:commandButton value="Voltar" id="proxPaga"
 					icon="pi pi-chevron-left" update="DinamycPanel"
-					actionListener="#{guiController.visuP1()}"
- />
+					actionListener="#{guiController.visuCarregar()}" />
 			</div>
 		</h:form>
 

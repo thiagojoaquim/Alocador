@@ -23,17 +23,12 @@ import br.ufs.dcomp.alocador.modelo.Professor;
 import br.ufs.dcomp.alocador.modelo.Turma;
 import br.ufs.dcomp.alocador.modelo.Turno;
 
-/**
- * Hello world!
- *
- */
-
 @ManagedBean(name = "guiController")
 @SessionScoped
 public class GUIcontroller {
-	
-	private Serializador serializador ;
-	private boolean renderedP1, renderedP2, renderedP3,renderedCD,renderedPF;
+
+	private Serializador serializador;
+	private boolean renderedP1, renderedP2, renderedP3, renderedCD, renderedPF;
 
 	private boolean isDiscHorFixo;
 
@@ -64,24 +59,24 @@ public class GUIcontroller {
 	private List<Turma> turmas = new ArrayList<>();
 
 	private List<Professor> professores = new ArrayList<>();
-	
+
 	private List<Turma> turmaNormal = new ArrayList<Turma>();
-	
+
 	private List<Turma> turmaFixa = new ArrayList<Turma>();
-	
+
 	private Turno turno;
-	
+
 	private List<Turma> resposta = new ArrayList<Turma>();
-	
-	private List<Professor> professoresAUX = new ArrayList<>();
+
+	private List<String> nomesProfAUX = new ArrayList<>();
 
 	{
 		renderedP1 = true;
-		diasSemana.add("SEGUNDA");
-		diasSemana.add("TERÇA");
-		diasSemana.add("QUARTA");
-		diasSemana.add("QUINTA");
-		diasSemana.add("SEXTA");
+		diasSemana.add(DiaDaSemana.SEGUNDA.name());
+		diasSemana.add(DiaDaSemana.TERCA.name());
+		diasSemana.add(DiaDaSemana.QUARTA.name());
+		diasSemana.add(DiaDaSemana.QUINTA.name());
+		diasSemana.add(DiaDaSemana.SEXTA.name());
 		turnos.add("MANHÃ");
 		turnos.add("TARDE");
 		turnos.add("NOITE");
@@ -94,67 +89,54 @@ public class GUIcontroller {
 			turmas.remove(t);
 
 	}
-	
 
-	public List<Professor> getProfessoresAUX() {
-		return professoresAUX;
+	public List<String> getNomesProfAUX() {
+		return nomesProfAUX;
 	}
 
-
-	public void setProfessoresAUX(List<Professor> professoresAUX) {
-		this.professoresAUX = professoresAUX;
+	public void setNomesProfAUX(List<String> nomesProfAUX) {
+		this.nomesProfAUX = nomesProfAUX;
 	}
-
 
 	public boolean isRenderedCD() {
 		return renderedCD;
 	}
 
-		
 	public boolean isRenderedPF() {
 		return renderedPF;
 	}
-
 
 	public void setRenderedPF(boolean renderedPF) {
 		this.renderedPF = renderedPF;
 	}
 
-
 	public void setRenderedCD(boolean renderedCD) {
 		this.renderedCD = renderedCD;
 	}
-
 
 	public List<Turma> getTurmaNormal() {
 		return turmaNormal;
 	}
 
-
 	public void setTurmaNormal(List<Turma> turmaNormal) {
 		this.turmaNormal = turmaNormal;
 	}
-	
-	
+
 	public List<Turma> getResposta() {
 		return resposta;
 	}
-
 
 	public void setResposta(List<Turma> resposta) {
 		this.resposta = resposta;
 	}
 
-
 	public List<Turma> getTurmaFixa() {
 		return turmaFixa;
 	}
 
-
 	public void setTurmaFixa(List<Turma> turmaFixa) {
 		this.turmaFixa = turmaFixa;
 	}
-
 
 	public String[] getPreferencias() {
 		return preferencias;
@@ -175,21 +157,33 @@ public class GUIcontroller {
 	public void setProfessores(List<Professor> professores) {
 		this.professores = professores;
 	}
-	public boolean isCheio() {
-		int sum=0;
-		int Tcredito = 15;
-		if(turno != null)
-			if(turno.equals(turno.NOITE))
-				Tcredito = 10;
-		for(Turma t: turmas) {
+
+	private int somaCreditosPossiveis() {
+		int sum = 0;
+		for (Turma t : turmas) {
 			sum += t.getDisciplina().getCredito().getCredito();
 		}
+		return sum;
 
-		if((sum/2)+1 >Tcredito || (sum/2)+2>Tcredito || (sum/2)+3>Tcredito) {
+	}
+
+	private int maxCreditoTurnoAtual() {
+		int Tcredito = 15;
+		if (turno != null)
+			if (turno.equals(turno.NOITE))
+				Tcredito = 10;
+		return Tcredito;
+	}
+
+	public boolean isCheio() {
+		int Tcredito = maxCreditoTurnoAtual();
+
+		if ((somaCreditosPossiveis() / 2) + 1 >= Tcredito) {
 			return true;
 		}
 		return false;
 	}
+
 	public boolean podeCarregar() {
 		return turmas.isEmpty();
 	}
@@ -224,7 +218,7 @@ public class GUIcontroller {
 
 	public void setTempTurno(String tempTurno) {
 		turno = tempTurno.equals("MANHÃ") ? Turno.MANHA : Turno.TARDE;
-		if(tempTurno.equals("NOITE"))
+		if (tempTurno.equals("NOITE"))
 			turno = Turno.NOITE;
 		System.out.println(turno);
 		this.tempTurno = tempTurno;
@@ -511,6 +505,13 @@ public class GUIcontroller {
 
 	}
 
+	private boolean podeAdicionarMateria(int creditosMateria) {
+		System.out.println(maxCreditoTurnoAtual());
+		System.out.println(somaCreditosPossiveis());
+		System.out.println(creditosMateria/2);
+		return creditosMateria/2 + somaCreditosPossiveis()/2 > maxCreditoTurnoAtual();
+	}
+
 	public void adicionarDisciplina() {
 		if (existeNome(nomeDisc) || existeCodigo(tempCodDisc)) {
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -518,6 +519,12 @@ public class GUIcontroller {
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			context.addMessage(null, msg);
 
+		} else if (podeAdicionarMateria(tempCreditos)) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			FacesMessage msg = new FacesMessage("O limite de créditos atual não pode ser inserido pois viola a quanti"
+					+ "dade máxima de crédito possível nesse turno.");
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			context.addMessage(null, msg);
 		} else {
 			Disciplina aux = new Disciplina();
 			Credito cr = tempCreditos == 2 ? Credito.DOIS : Credito.QUATRO;
@@ -531,8 +538,8 @@ public class GUIcontroller {
 			if (isDiscHorFixo) {
 				tempt.setHorario(montarHorarioMateria());
 				turmaFixa.add(tempt);
-				
-			}else {
+
+			} else {
 				turmaNormal.add(tempt);
 			}
 			turmas.add(tempt);
@@ -547,8 +554,7 @@ public class GUIcontroller {
 	}
 
 	public void limparPaginas() {
-		renderedP1 = renderedP2 = renderedP3=
-				 renderedCD= renderedPF = false;
+		renderedP1 = renderedP2 = renderedP3 = renderedCD = renderedPF = false;
 	}
 
 	public void visuP2() {
@@ -613,75 +619,102 @@ public class GUIcontroller {
 	public void removerProfessor(Professor p) {
 		professores.remove(p);
 	}
+
 	public boolean podeCalcular() {
-		return professores.size() > 4;
+		int a = 0;
+		for (Professor p : professores)
+			if (p.getDisciplinasDePreferencia() != null)
+				if (!p.getDisciplinasDePreferencia().isEmpty())
+					a++;
+		return a > 4;
 	}
-	
+
 	public Grade montarGrade() {
 		Grade grade = new Grade();
 		grade.setProfessores(professores);
-		if(!turmaNormal.isEmpty())
+		if (!turmaNormal.isEmpty())
 			grade.setTurmas(turmaNormal);
-		if(!turmaFixa.isEmpty())
+		if (!turmaFixa.isEmpty())
 			grade.setTurmasDefinidas(turmaFixa);
 		grade.setTurno(turno);
 		return grade;
 	}
+
 	private void visuP3() {
 		limparPaginas();
 		renderedP3 = true;
 	}
-	public void  obterResp() {
+
+	public void obterResp() {
 		visuP3();
 		Alocador a = new Alocador(montarGrade());
 		resposta = a.alocar();
 		System.out.println(resposta);
 
 	}
-	public List<String> listaArquivos(){
+
+	public List<String> listaArquivos() {
 		return serializador.getArquivosNome();
 	}
+
 	public void carregarDisciplinas(String nome) {
 		turmas = serializador.carregarLista(nome);
 		turno = serializador.carregarTurno(nome);
 		System.out.println(turmas);
 		System.out.println(turno);
+		carregarProfs();
 		limparPaginas();
 		renderedPF = true;
 	}
+
 	public void visuCarregar() {
 		limparPaginas();
 		renderedCD = true;
 	}
+
 	public void salvarDisciplinas() {
-		serializador.salvarTurma(turmas,turno);	
-		System.out.println(" I GO T TE DAAAAAAAAAAAAAAA");
+		serializador.salvarTurma(turmas, turno);
+		serializador.salvarProfessor(professores);
+		FacesContext context = FacesContext.getCurrentInstance();
+		FacesMessage msg = new FacesMessage("Salvo com sucesso.");
+		msg.setSeverity(FacesMessage.SEVERITY_INFO);
+		context.addMessage(null, msg);
 	}
+
 	public void salvarProfs() {
 		serializador.salvarProfessor(professores);
-		System.out.println("salvo");
+		FacesContext context = FacesContext.getCurrentInstance();
+		FacesMessage msg = new FacesMessage("Salvo com sucesso.");
+		msg.setSeverity(FacesMessage.SEVERITY_INFO);
+		context.addMessage(null, msg);
 	}
-	
-	public List<Professor> carregarProfs(){
-		professoresAUX = serializador.carregarProfessores();
-		return professoresAUX;
+
+	public void carregarProfs() {
+		System.out.println("PROFESSOR CARREGADO");
+		professores = serializador.carregarProfessores();
+		System.out.println(professores);
+		for (Professor p : professores)
+			nomesProfAUX.add(p.getNome());
+
 	}
-	public void inserirPref(Professor p) {
-		if(preferencias.length > 2 || preferencias.length <6) {
-		System.out.println(p.getDisciplinasDePreferencia());
-		List<Disciplina> temp = new ArrayList<>();
-		for(String s:preferencias)
-			temp.add(procuraDisc(s));
-		p.setDisciplinasDePreferencia(temp);
-		professores.add(p);
-		professoresAUX.remove(p);
-		System.out.println(p.getDisciplinasDePreferencia());
-		}else {
+
+	public void inserirPref() {
+		System.out.println(preferencias);
+		if (preferencias.length > 2 || preferencias.length < 6) {
+			System.out.println(nomeProf + " " + preferencias[0]);
+			List<Disciplina> temp = new ArrayList<>();
+			for (String s : preferencias)
+				temp.add(procuraDisc(s));
+			for (Professor prof : professores)
+				if (prof.getNome().equals(nomeProf))
+					prof.setDisciplinasDePreferencia(temp);
+			nomesProfAUX.remove(nomeProf);
+		} else {
 			FacesContext context = FacesContext.getCurrentInstance();
 			FacesMessage msg = new FacesMessage("O professor deve ter de 3 a 5 preferências.");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			context.addMessage(null, msg);
-			
+
 		}
 	}
 
