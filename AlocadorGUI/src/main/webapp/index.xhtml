@@ -60,6 +60,12 @@ ui-dialog-content ui-widget-content {
 		<h:panelGroup rendered="#{guiController.renderedP3}" id="p3">
 			<ui:include src="pagina3.xhtml" />
 		</h:panelGroup>
+		<h:panelGroup rendered="#{guiController.renderedCD}" id="p4">
+			<ui:include src="selecionarDisc.xhtml" />
+		</h:panelGroup>
+		<h:panelGroup rendered="#{guiController.renderedPF}" id="p5">
+			<ui:include src="professoresCarregados.xhtml" />
+		</h:panelGroup>
 	</h:panelGroup>
 </h:body>
 </html>

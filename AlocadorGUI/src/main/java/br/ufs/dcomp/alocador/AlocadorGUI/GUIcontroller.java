@@ -31,7 +31,9 @@ import br.ufs.dcomp.alocador.modelo.Turno;
 @ManagedBean(name = "guiController")
 @SessionScoped
 public class GUIcontroller {
-	private boolean renderedP1, renderedP2, renderedP3;
+	
+	private Serializador serializador ;
+	private boolean renderedP1, renderedP2, renderedP3,renderedCD,renderedPF;
 
 	private boolean isDiscHorFixo;
 
@@ -70,6 +72,8 @@ public class GUIcontroller {
 	private Turno turno;
 	
 	private List<Turma> resposta = new ArrayList<Turma>();
+	
+	private List<Professor> professoresAUX = new ArrayList<>();
 
 	{
 		renderedP1 = true;
@@ -82,6 +86,7 @@ public class GUIcontroller {
 		turnos.add("TARDE");
 		turnos.add("NOITE");
 		validador = Validar.getValidador();
+		serializador = Serializador.getSerializador();
 	}
 
 	public void removerTurma(Turma t) {
@@ -90,6 +95,36 @@ public class GUIcontroller {
 
 	}
 	
+
+	public List<Professor> getProfessoresAUX() {
+		return professoresAUX;
+	}
+
+
+	public void setProfessoresAUX(List<Professor> professoresAUX) {
+		this.professoresAUX = professoresAUX;
+	}
+
+
+	public boolean isRenderedCD() {
+		return renderedCD;
+	}
+
+		
+	public boolean isRenderedPF() {
+		return renderedPF;
+	}
+
+
+	public void setRenderedPF(boolean renderedPF) {
+		this.renderedPF = renderedPF;
+	}
+
+
+	public void setRenderedCD(boolean renderedCD) {
+		this.renderedCD = renderedCD;
+	}
+
 
 	public List<Turma> getTurmaNormal() {
 		return turmaNormal;
@@ -154,6 +189,9 @@ public class GUIcontroller {
 			return true;
 		}
 		return false;
+	}
+	public boolean podeCarregar() {
+		return turmas.isEmpty();
 	}
 
 	public String[] getDiasSelecionados() {
@@ -509,7 +547,8 @@ public class GUIcontroller {
 	}
 
 	public void limparPaginas() {
-		renderedP1 = renderedP2 = renderedP3 = false;
+		renderedP1 = renderedP2 = renderedP3=
+				 renderedCD= false;
 	}
 
 	public void visuP2() {
@@ -599,4 +638,32 @@ public class GUIcontroller {
 		System.out.println(resposta);
 
 	}
+	public List<String> listaArquivos(){
+		return serializador.getArquivosNome();
+	}
+	public void carregarDisciplinas(String nome) {
+		turmas = serializador.carregarLista(nome);
+		turno = serializador.carregarTurno(nome);
+		System.out.println(turmas);
+		limparPaginas();
+		renderedPF = true;
+	}
+	public void visuCarregar() {
+		limparPaginas();
+		renderedCD = true;
+	}
+	public void salvarDisciplinas() {
+		serializador.salvarTurma(turmas,turno);	
+		System.out.println(" I GO T TE DAAAAAAAAAAAAAAA");
+	}
+	public void salvarProfs() {
+		serializador.salvarProfessor(professores);
+		System.out.println("salvo");
+	}
+	
+	public List<Professor> carregarProfs(){
+		professoresAUX = serializador.carregarProfessores();
+		return professores;
+	}
+
 }

@@ -8,7 +8,7 @@
 	display: none;
 }
 </style>
-	<p:panel header="Voltar">
+	<p:panel header="Adicionar Professor">
 		<h:form id="four">
 			<p:panelGrid columns="8" id="grid2" class="ui-noborder"
 				style="display:flex">
@@ -63,23 +63,23 @@
 			</p:dataTable>
 			<br></br>
 			<div align="right" draggable="false">
-				<p:commandButton value="Obter Resposta"
-					icon="pi pi-sign-in"
+				<p:commandButton value="Obter Resposta" icon="pi pi-sign-in"
 					actionListener="#{guiController.obterResp()}"
-					update="messages,DinamycPanel"
-					process="@this"
-					id="id"
-					immediate="true"
-					rendered="#{guiController.podeCalcular()}" />
+					update="messages,DinamycPanel" process="@this" id="id"
+					immediate="true" rendered="#{guiController.podeCalcular()}" />
+				</div><br></br>
+				<div align="right" draggable="false">
+				<p:commandButton value="Salvar" icon="pi pi-sign-in"
+					actionListener="#{guiController.salvarProfs()}"
+					update="messages,DinamycPanel" process="@this" id="idey"
+					immediate="true" rendered="#{guiController.podeCalcular()}" />
 			</div>
-		</h:form>
-		<h:form id="bott">
 			<div align="left" draggable="false">
 				<p:commandButton value="Voltar" id="proxPag"
 					icon="pi pi-chevron-left" update="DinamycPanel"
 					actionListener="#{guiController.visuP1()}"
-				
-					rendered="#{guiController.isCheio()}" />
+					immediate="true"
+					 />
 			</div>
 		</h:form>
 

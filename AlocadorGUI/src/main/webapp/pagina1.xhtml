@@ -120,14 +120,31 @@
 			value="Todas disciplinas devem ser registradas em um mesmo turno." />
 		<p:tooltip for="form:btnInserir"
 			value="O período tem que ter seis disciplinas." />
-						<h:form id="f1">
-				<div align="right" draggable="false">
-					<p:commandButton value="Avançar" id="proxPag"
-						icon="pi pi-chevron-right" update="DinamycPanel"
-						actionListener="#{guiController.visuP2()}"
-						rendered="#{guiController.isCheio()}" />
-				</div>
-			</h:form>
+		<h:form id="f1">
+			<div align="right" draggable="false">
+				<p:commandButton value="Avançar" id="proxPag"
+					icon="pi pi-chevron-right" update="DinamycPanel"
+					actionListener="#{guiController.visuP2()}"
+					rendered="#{guiController.isCheio()}" />
+			</div>
+		</h:form>
+		<div align="right" draggable="false">
+			<p:commandButton value="Salvar" id="btnSalvar" icon="pi pi-sign-in"
+				widgetVar="btnVar"
+				actionListener="#{guiController.salvarDisciplinas()}"
+				update="messages,DinamycPanel"
+				immediate="true"
+				rendered="#{guiController.isCheio()}" />
+		</div>
+		<br></br>
+		<div align="right" draggable="false">
+			<p:commandButton value="Carregar" id="btnCarregar" icon="pi pi-sign-in"
+				widgetVar="btnVar"
+				actionListener="#{guiController.visuCarregar()}"
+				update="messages,DinamycPanel"
+				immediate="true"
+				rendered="#{guiController.podeCarregar()}" />
+		</div>
 	</p:panel>
 	<script>
 		function verificarTH(remoteCommand) {
