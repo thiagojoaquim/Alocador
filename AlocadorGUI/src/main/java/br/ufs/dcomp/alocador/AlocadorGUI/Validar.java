@@ -30,7 +30,6 @@ public class Validar implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 		// get limit
 		Spinner cHorariaComp = (Spinner) getAtributo("form:spiner");
-		SelectCheckboxMenu myComponent = (SelectCheckboxMenu) getAtributo("form:menu");
 		int cargaHoraria = Integer.parseInt(cHorariaComp.getAttributes().get("value").toString());
 		SelectCheckboxMenu aux = (SelectCheckboxMenu) getAtributo("form:menuHorario");
 		

@@ -70,13 +70,15 @@ public class GUIcontroller {
 
 	private List<String> nomesProfAUX = new ArrayList<>();
 
+	private List<String> horariosDisponiveis = new ArrayList<>();
+
 	{
 		renderedP1 = true;
-		diasSemana.add(DiaDaSemana.SEGUNDA.name());
-		diasSemana.add(DiaDaSemana.TERCA.name());
-		diasSemana.add(DiaDaSemana.QUARTA.name());
-		diasSemana.add(DiaDaSemana.QUINTA.name());
-		diasSemana.add(DiaDaSemana.SEXTA.name());
+		diasSemana.add("SEGUNDA");
+		diasSemana.add("TERÇA");
+		diasSemana.add("QUARTA");
+		diasSemana.add("QUINTA");
+		diasSemana.add("SEXTA");
 		turnos.add("MANHÃ");
 		turnos.add("TARDE");
 		turnos.add("NOITE");
@@ -88,6 +90,14 @@ public class GUIcontroller {
 		if (!turmas.isEmpty())
 			turmas.remove(t);
 
+	}
+
+	public List<String> getHorariosAdicionado() {
+		return horariosDisponiveis;
+	}
+
+	public void setHorariosAdicionado(List<String> horariosAdicionado) {
+		this.horariosDisponiveis = horariosAdicionado;
 	}
 
 	public List<String> getNomesProfAUX() {
@@ -178,7 +188,7 @@ public class GUIcontroller {
 	public boolean isCheio() {
 		int Tcredito = maxCreditoTurnoAtual();
 
-		if ((somaCreditosPossiveis() / 2) + 1 >= Tcredito) {
+		if ((somaCreditosPossiveis() / 2)  >= Tcredito) {
 			return true;
 		}
 		return false;
@@ -326,17 +336,27 @@ public class GUIcontroller {
 			int control = diasSemana.indexOf(dia) + 2;
 			horarios.add(control + turnSimbol + "12");
 			horarios.add(control + turnSimbol + "34");
-			if (!turnSimbol.equals("N"))
+			if (!turnSimbol.equals("N")) {
 				horarios.add(control + turnSimbol + "56");
+			}
 		}
 
 	}
 
 	public void validarTH() {
-		SelectOneMenu turno = (SelectOneMenu) validador.getAtributo("form:turno");
+		String nomeTurno="";
+		SelectOneMenu ta = (SelectOneMenu) validador.getAtributo("form:turno");
 		SelectCheckboxMenu checkDias = (SelectCheckboxMenu) validador.getAtributo("form:menu");
-		String nomeTurno = turno.getSubmittedValue().toString();
 		String[] dias = ((String[]) checkDias.getSubmittedValue());
+		if(turno != null) {
+			nomeTurno = turno.equals(Turno.MANHA)? "MANHÃ":"TARDE";
+			if(turno.equals(Turno.NOITE))
+				nomeTurno = "NOITE";
+		}else{
+			nomeTurno= ta.getSubmittedValue().toString();
+		}
+		if(dias == null)
+			dias = new String[0];
 		if (nomeTurno.isEmpty() || (dias.length == 0))
 			horarios.clear();
 		else {
@@ -502,14 +522,29 @@ public class GUIcontroller {
 		nomeDisc = tempCodDisc = "";
 		tempCreditos = 2;
 		horarioSelecionados = diasSelecionados = new String[0];
+		horarios= new ArrayList<>();
 
 	}
 
 	private boolean podeAdicionarMateria(int creditosMateria) {
 		System.out.println(maxCreditoTurnoAtual());
 		System.out.println(somaCreditosPossiveis());
-		System.out.println(creditosMateria/2);
-		return creditosMateria/2 + somaCreditosPossiveis()/2 > maxCreditoTurnoAtual();
+		System.out.println(creditosMateria / 2);
+		return creditosMateria / 2 + somaCreditosPossiveis() / 2 > maxCreditoTurnoAtual();
+	}
+
+	public boolean horarioOcupado() {
+		for (String s : horarioSelecionados) {
+			if (horariosDisponiveis.contains(s))
+				return true;
+		}
+		for (String s : horarioSelecionados)
+			horariosDisponiveis.add(s);
+
+		System.out.println(horariosDisponiveis);
+		return false;
+	
+
 	}
 
 	public void adicionarDisciplina() {
@@ -535,14 +570,26 @@ public class GUIcontroller {
 			aux.setNome(nomeDisc);
 			Turma tempt = new Turma();
 			tempt.setDisciplina(aux);
+			boolean nsuc = false ;
 			if (isDiscHorFixo) {
+				if (horarioOcupado()) {
+					FacesContext context = FacesContext.getCurrentInstance();
+					FacesMessage msg = new FacesMessage("Horário selecionado já esta ocupado");
+					msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+					context.addMessage(null, msg);
+					limparVariaveis();
+					nsuc = true;
+
+				}else {
 				tempt.setHorario(montarHorarioMateria());
 				turmaFixa.add(tempt);
+				}
 
 			} else {
 				turmaNormal.add(tempt);
 			}
-			turmas.add(tempt);
+			if(!nsuc)
+				turmas.add(tempt);
 			limparVariaveis();
 		}
 
@@ -660,6 +707,13 @@ public class GUIcontroller {
 	public void carregarDisciplinas(String nome) {
 		turmas = serializador.carregarLista(nome);
 		turno = serializador.carregarTurno(nome);
+		for(Turma t: turmas) {
+			if(t.getHorario()  != null)
+				turmaFixa.add(t);
+			else {
+				turmaNormal.add(t);
+			}
+		}
 		System.out.println(turmas);
 		System.out.println(turno);
 		carregarProfs();

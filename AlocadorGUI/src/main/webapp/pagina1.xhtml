@@ -33,6 +33,7 @@
 					<h:outputText value="Turno das aulas" id="pd3" />
 					<p:selectOneMenu id="turno" value="#{guiController.tempTurno}"
 						disabled="#{guiController.isTurmaInserida()}"
+						onchange="verificarTH(turnoCmd)"
 						requiredMessage="É necessário informar o turno." required="true">
 						<f:selectItem itemLabel="SEL. TURNO" itemValue=""
 							noSelectionOption="true" />
@@ -92,7 +93,7 @@
 							escape="false" />
 					</p:column>
 					<p:column headerText="Horarios" style="text-align:center">
-						<h:outputText value="#{turmas.getCodigosToString()}"
+						<h:outputText value="#{turmas.getHorario()}"
 							escape="false" />
 					</p:column>
 					<p:column headerText="Carga Horaria" style="text-align:center">
