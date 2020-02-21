@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
@@ -24,7 +26,7 @@ import br.ufs.dcomp.alocador.modelo.Turma;
 import br.ufs.dcomp.alocador.modelo.Turno;
 
 @ManagedBean(name = "guiController")
-@SessionScoped
+@ViewScoped
 public class GUIcontroller {
 
 	private Serializador serializador;
@@ -754,7 +756,7 @@ public class GUIcontroller {
 
 	public void inserirPref() {
 		System.out.println(preferencias);
-		if (preferencias.length > 2 || preferencias.length < 6) {
+		if (preferencias.length > 2 && preferencias.length < 6) {
 			System.out.println(nomeProf + " " + preferencias[0]);
 			List<Disciplina> temp = new ArrayList<>();
 			for (String s : preferencias)
