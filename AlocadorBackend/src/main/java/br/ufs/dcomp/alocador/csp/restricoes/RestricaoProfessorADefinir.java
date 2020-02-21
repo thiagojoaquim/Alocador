@@ -47,7 +47,8 @@ public class RestricaoProfessorADefinir implements Constraint<TurmaVariavel, Dom
 			}
 			for (Professor professor : professorCargaHoraria.keySet()) {
 				if (professor.getDisciplinasDePreferencia().contains(variavel.getTurma().getDisciplina())
-						&& !professor.getNome().equals(Constantes.PROFESSOR_A_DEFINIR)) {
+						&& !professor.getNome().equals(Constantes.PROFESSOR_A_DEFINIR)
+						&& (professorCargaHoraria.get(professor) + variavel.getTurma().getDisciplina().getCredito().getCredito()) <= Constantes.CARGA_HORARIA) {
 					return false;
 				}
 			}
