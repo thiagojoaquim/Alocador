@@ -683,8 +683,10 @@ public class GUIcontroller {
 		grade.setProfessores(professores);
 		if (!turmaNormal.isEmpty())
 			grade.setTurmas(turmaNormal);
-		if (!turmaFixa.isEmpty())
+		if (!turmaFixa.isEmpty()) {
 			grade.setTurmasDefinidas(turmaFixa);
+			System.out.println(turmaFixa);
+		}
 		grade.setTurno(turno);
 		return grade;
 	}
