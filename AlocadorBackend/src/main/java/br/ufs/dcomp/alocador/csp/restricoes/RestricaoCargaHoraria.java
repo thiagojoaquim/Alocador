@@ -40,7 +40,8 @@ public class RestricaoCargaHoraria implements Constraint<TurmaVariavel, Dominio>
 					professorCargaHoraria.put(valor.getProfessor(),
 							profCargaSum + (int) valor.getHorario().size() * 2);
 				}
-				if (professorCargaHoraria.get(valor.getProfessor()) > Constantes.CARGA_HORARIA) {
+				if (professorCargaHoraria.get(valor.getProfessor()) > Constantes.CARGA_HORARIA &&
+						!valor.getProfessor().getNome().equals(Constantes.PROFESSOR_A_DEFINIR)) {
 					return false;
 				}
 			}
