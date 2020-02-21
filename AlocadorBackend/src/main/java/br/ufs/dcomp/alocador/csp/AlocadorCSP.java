@@ -146,18 +146,10 @@ public class AlocadorCSP extends CSP<TurmaVariavel, Dominio> {
 		List<Dominio> resultado = new ArrayList<>();
 		for (List<HorarioMateria> horario : horarios) {
 			for (Professor professor : professores) {
-				Dominio dominio = null;
-				if(professor.getNome().equals(Constantes.PROFESSOR_A_DEFINIR)) {
-					dominio = new Dominio();
-					dominio.setHorario(new ArrayList<HorarioMateria>());
-					dominio.setProfessor(professor);
-				} else {
-					dominio = new Dominio();
-					dominio.setHorario(horario);
-					dominio.setProfessor(professor);
-					resultado.add(dominio);
-				}
-				
+				Dominio dominio = new Dominio();
+				dominio.setHorario(horario);
+				dominio.setProfessor(professor);
+				resultado.add(dominio);
 			}
 		}
 		return resultado;
